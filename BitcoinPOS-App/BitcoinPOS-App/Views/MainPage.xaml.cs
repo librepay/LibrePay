@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
-namespace BitcoinPOS_App
+namespace BitcoinPOS_App.Views
 {
 	public partial class MainPage : ContentPage
 	{

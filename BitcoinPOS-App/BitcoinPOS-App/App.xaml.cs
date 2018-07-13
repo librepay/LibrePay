@@ -1,4 +1,4 @@
-using System;
+using BitcoinPOS_App.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
