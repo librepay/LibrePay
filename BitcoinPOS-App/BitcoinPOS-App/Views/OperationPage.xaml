@@ -1,14 +1,7 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                  xmlns:local="clr-namespace:BitcoinPOS_App"
-                  xmlns:views="clr-namespace:BitcoinPOS_App.Views"
-                  x:Class="BitcoinPOS_App.Views.MainPage"
-                  Title="Bitcoin POS">
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Opções" Clicked="Settings_Clicked" />
-    </ContentPage.ToolbarItems>
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BitcoinPOS_App.Views.OperationPage">
     <ContentPage.Content>
         <StackLayout Padding="10">
             <!-- Place new controls here -->

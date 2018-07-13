@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BitcoinPOS_App.Views.SettingsPage"
+             Title="Opções">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Salvar" Clicked="Save_Clicked" />
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Text="Private Key" />
+            <Entry x:Name="EntryPrivKey" IsSpellCheckEnabled="False" IsPassword="True" Text="{Binding PrivateKey}" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
