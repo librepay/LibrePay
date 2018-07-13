@@ -11,7 +11,7 @@
 
 [assembly: global::Android.Runtime.ResourceDesignerAttribute("BitcoinPOS_App.Droid.Resource", IsApplication=true)]
 
-namespace BitcoinPOS_App.Droid
+namespace BitcoinPOS_App.Droid.Resources
 {
 	
 	
@@ -26,7 +26,7 @@ namespace BitcoinPOS_App.Droid
 		
 		public static void UpdateIdValues()
 		{
-			global::Xamarin.Forms.Platform.Android.Resource.Attribute.actionBarSize = global::BitcoinPOS_App.Droid.Resource.Attribute.actionBarSize;
+			global::Xamarin.Forms.Platform.Android.Resource.Attribute.actionBarSize = global::BitcoinPOS_App.Droid.Resources.Resource.Attribute.actionBarSize;
 		}
 		
 		public partial class Animation
