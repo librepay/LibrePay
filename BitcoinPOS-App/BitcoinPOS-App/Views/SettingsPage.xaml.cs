@@ -21,24 +21,48 @@ namespace BitcoinPOS_App.Views
         {
             InitializeComponent();
 
-            LoadSettingsCommand = new Command(() =>
-            {
-                _settingsProvider.GetSecureValueAsync<string>(Constants.Setting_PrivateKey)
-                    .ContinueWith(_ => _viewModel.IsLoaded = true, TaskContinuationOptions.OnlyOnRanToCompletion)
-                    .ContinueWith(_ => DisplayAlert("Erro", "Erro ao carregar configuração", "Cancelar"), TaskContinuationOptions.NotOnRanToCompletion);
-            });
+            LoadSettingsCommand = new Command(LoadSettingsCommandAction);
 
             _settingsProvider = DependencyService.Get<ISettingsProvider>();
-            //_msgDisplayer = DependencyService.Get<IMessageDisplayer>(); ;
+            _msgDisplayer = DependencyService.Get<IMessageDisplayer>();
             BindingContext = _viewModel = new SettingsViewModel();
 
             LoadSettingsCommand.Execute(null);
         }
 
+        private void LoadSettingsCommandAction()
+        {
+            // tries to fetch the private key
+            // then if it work changes the IsLoaded prop as true
+            // if it dosen't work shows a message that get users attention
+            _settingsProvider.GetSecureValueAsync<string>(Constants.Setting_PrivateKey)
+                .ContinueWith(t =>
+                {
+                    if (!t.IsFaulted)
+                    {
+                        _viewModel.IsLoaded = true;
+                        _viewModel.PrivateKey = t.Result;
+                        return Task.CompletedTask;
+                    }
+
+                    Device.BeginInvokeOnMainThread(async () =>
+                    {
+                        // needs to be at root to show alerts
+                        await Navigation.PopToRootAsync();
+                        await DisplayAlert("Erro", "Erro ao carregar configuração", "Cancelar");
+                    });
+                    return Task.CompletedTask;
+                });
+        }
+
         private async void Save_Clicked(object sender, EventArgs e)
         {
+            // saves the current private key
             await _settingsProvider.SetSecureValueAsync(Constants.Setting_PrivateKey, _viewModel.PrivateKey);
+
+            // go back to the main page
             await Navigation.PopAsync();
+            await _msgDisplayer.ShowMessageAsync("Configurações salvas!");
         }
     }
 }

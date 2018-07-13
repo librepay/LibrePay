@@ -1,9 +1,14 @@
 ﻿namespace BitcoinPOS_App.ViewModels
 {
-    public class SettingsViewModel
+    public class SettingsViewModel : BaseViewModel
     {
         public bool IsLoaded { get; set; }
 
-        public string PrivateKey { get; set; }
+        private string privateKey;
+        public string PrivateKey
+        {
+            get { return privateKey; }
+            set { SetProperty(ref privateKey, value); }
+        }
     }
 }

@@ -15,7 +15,6 @@ namespace BitcoinPOS_App.Services
         public async Task<T> GetSecureValueAsync<T>(string key)
         {
             CheckKey(key);
-
             var secureValue = await SecureStorage.GetAsync(key);
 
             using (var ms = new MemoryStream(Convert.FromBase64String(secureValue)))

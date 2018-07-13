@@ -7,9 +7,10 @@
         <ToolbarItem Text="Salvar" Clicked="Save_Clicked" />
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <StackLayout>
+        <StackLayout Margin="10">
             <Label Text="Private Key" />
-            <Entry x:Name="EntryPrivKey" IsSpellCheckEnabled="False" IsPassword="True" Text="{Binding PrivateKey}" />
+            <Editor IsSpellCheckEnabled="False" Text="{Binding PrivateKey}" HeightRequest="200"/>
+            <Button Text="Salvar" Clicked="Save_Clicked" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
