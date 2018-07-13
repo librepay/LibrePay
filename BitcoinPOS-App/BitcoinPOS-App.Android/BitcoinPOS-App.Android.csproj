@@ -91,9 +91,9 @@
     <Folder Include="Resources\drawable\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BitcoinPOS_App\BitcoinPOS_App.csproj">
-      <Project>{6CD05399-6C79-4C68-A747-E3E33E350E86}</Project>
-      <Name>BitcoinPOS_App</Name>
+    <ProjectReference Include="..\BitcoinPOS-App\BitcoinPOS-App.csproj">
+      <Project>{18852b06-4465-4ec4-918f-3669afb9fa3d}</Project>
+      <Name>BitcoinPOS-App</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
