@@ -9,7 +9,7 @@
     <ContentPage.Content>
         <StackLayout Margin="10">
             <Label Text="Private Key" />
-            <Editor IsSpellCheckEnabled="False" Text="{Binding PrivateKey}" HeightRequest="200"/>
+            <Editor Text="{Binding PrivateKey}" HeightRequest="200"/>
             <Button Text="Salvar" Clicked="Save_Clicked" />
         </StackLayout>
     </ContentPage.Content>
