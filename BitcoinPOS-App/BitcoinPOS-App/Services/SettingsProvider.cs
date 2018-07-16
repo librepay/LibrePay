@@ -17,6 +17,9 @@ namespace BitcoinPOS_App.Services
             CheckKey(key);
             var secureValue = await SecureStorage.GetAsync(key);
 
+            if (string.IsNullOrWhiteSpace(secureValue))
+                return default;
+
             using (var ms = new MemoryStream(Convert.FromBase64String(secureValue)))
             {
                 return (T)new BinaryFormatter()

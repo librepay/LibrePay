@@ -1,6 +1,7 @@
 ﻿using BitcoinPOS_App.Interfaces;
 using BitcoinPOS_App.ViewModels;
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -44,6 +45,8 @@ namespace BitcoinPOS_App.Views
                         _viewModel.PrivateKey = t.Result;
                         return Task.CompletedTask;
                     }
+
+                    Debug.WriteLine(string.Format("Erro ao buscar private key{0}{1}", Environment.NewLine, t.Exception));
 
                     Device.BeginInvokeOnMainThread(async () =>
                     {
