@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
 using BitcoinPOS_App.Interfaces;
 using BitcoinPOS_App.Services;
+using Plugin.Settings;
+using Plugin.Settings.Abstractions;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -13,6 +18,24 @@ namespace BitcoinPOS_App.Services
 {
     public class EssentialSettingsProvider : ISettingsProvider
     {
+        private static readonly Dictionary<Type, MethodInfo> GetCrossSettingsMethods;
+        private static readonly Dictionary<Type, MethodInfo> SetCrossSettingsMethods;
+
+        static EssentialSettingsProvider()
+        {
+            Dictionary<Type, MethodInfo> GetCrossSettingsOverloads(string overloadNames)
+            {
+                return typeof(ISettings)
+                    .GetMethods()
+                    .Select(m => (method: m, parameters: m.GetParameters()))
+                    .Where(m => m.method.Name == overloadNames && m.parameters.Length == 3)
+                    .ToDictionary(d => d.parameters[1].ParameterType, d => d.method);
+            }
+
+            GetCrossSettingsMethods = GetCrossSettingsOverloads(nameof(ISettings.GetValueOrDefault));
+            SetCrossSettingsMethods = GetCrossSettingsOverloads(nameof(ISettings.AddOrUpdateValue));
+        }
+
         public async Task<T> GetSecureValueAsync<T>(string key)
         {
             CheckKey(key);
@@ -31,7 +54,11 @@ namespace BitcoinPOS_App.Services
         public Task<T> GetValueAsync<T>(string key)
         {
             CheckKey(key);
-            throw new NotImplementedException();
+
+            var value = (T) GetCrossSettingsMethods[typeof(T)]
+                .Invoke(CrossSettings.Current, new object[] {key, default(T), null});
+
+            return Task.FromResult(value);
         }
 
         public Task SetSecureValueAsync<T>(string key, T value)
@@ -52,7 +79,11 @@ namespace BitcoinPOS_App.Services
         public Task SetValueAsync<T>(string key, T value)
         {
             CheckKey(key);
-            throw new NotImplementedException();
+
+            SetCrossSettingsMethods[typeof(T)]
+                .Invoke(CrossSettings.Current, new object[] {key, value, null});
+
+            return Task.CompletedTask;
         }
 
         private static void CheckKey(string key)
