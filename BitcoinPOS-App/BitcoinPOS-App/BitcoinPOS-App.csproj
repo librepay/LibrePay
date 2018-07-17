@@ -3,8 +3,10 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>BitcoinPOS_App</RootNamespace>
+    <AssemblyName>BitcoinPOS_App</AssemblyName>
     <LangVersion>7.1</LangVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <ProjectGuid>{18852b06-4465-4ec4-918f-3669afb9fa3d}</ProjectGuid>
   </PropertyGroup>
 
   <ItemGroup>

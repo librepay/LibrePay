@@ -3,10 +3,11 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
 using BitcoinPOS_App.Interfaces;
+using BitcoinPOS_App.Services;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
-[assembly: Dependency(typeof(BitcoinPOS_App.Services.EssentialSettingsProvider))]
+[assembly: Dependency(typeof(EssentialSettingsProvider))]
 
 namespace BitcoinPOS_App.Services
 {
@@ -22,7 +23,7 @@ namespace BitcoinPOS_App.Services
 
             using (var ms = new MemoryStream(Convert.FromBase64String(secureValue)))
             {
-                return (T)new BinaryFormatter()
+                return (T) new BinaryFormatter()
                     .Deserialize(ms);
             }
         }

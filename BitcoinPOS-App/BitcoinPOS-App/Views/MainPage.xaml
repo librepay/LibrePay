@@ -12,7 +12,7 @@
     <ContentPage.Content>
         <StackLayout Padding="10">
             <!-- Place new controls here -->
-            <Editor IsEnabled="False" Text="{Binding ResultText}" HeightRequest="150" />
+            <Editor IsEnabled="False" Text="{Binding TransactionValue, Mode=OneWay, StringFormat='{0:C}'}" HeightRequest="150" />
             <StackLayout x:Name="BoxNumbers">
                 <StackLayout Padding="13" Orientation="Horizontal">
                     <Button AutomationId="7" Text="7" Clicked="Number_Clicked" />
@@ -30,8 +30,9 @@
                     <Button AutomationId="1" Text="1" Clicked="Number_Clicked" />
                 </StackLayout>
                 <StackLayout Padding="13" Orientation="Horizontal">
+                    <Button AutomationId="virgula" Text="," Clicked="Number_Clicked" />
                     <Button AutomationId="0" Text="0" Clicked="Number_Clicked" />
-                    <Button Style="{StaticResource Key=ButtonPrimary}" AutomationId="ok" Text="Pagar" />
+                    <Button Style="{StaticResource ButtonPrimary}" AutomationId="ok" Text="Pagar" Clicked="Pay_Clicked" />
                 </StackLayout>
             </StackLayout>
         </StackLayout>
