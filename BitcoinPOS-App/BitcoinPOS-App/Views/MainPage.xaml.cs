@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using BitcoinPOS_App.Interfaces;
 using BitcoinPOS_App.ViewModels;
 using Xamarin.Forms;
@@ -10,6 +11,9 @@ namespace BitcoinPOS_App.Views
     {
         private MainPageViewModel _viewModel;
         private readonly IMessageDisplayer _msgDisplayer;
+        private readonly ISettingsProvider _settingsProvider;
+
+        public Command CheckPrivateKey { get; set; }
 
         public MainPage()
         {
@@ -17,6 +21,38 @@ namespace BitcoinPOS_App.Views
 
             ResetViewModel();
             _msgDisplayer = DependencyService.Get<IMessageDisplayer>();
+            _settingsProvider = DependencyService.Get<ISettingsProvider>();
+
+            CheckPrivateKey = new Command(async () =>
+            {
+                Debug.WriteLine("Checkando se tem private key configurada...");
+                var privateKey = await _settingsProvider.GetSecureValueAsync<string>(Constants.SettingPrivateKey);
+
+                if (string.IsNullOrWhiteSpace(privateKey))
+                {
+                    Debug.WriteLine("Pedindo para o usuário configurar a private key");
+
+                    Device.BeginInvokeOnMainThread(async () =>
+                    {
+                        var alertResult = await DisplayAlert("Configurações",
+                            "Para usar o aplicativo é necessário configurar uma chave privada para poder gerar endereços de pagamento.",
+                            "Ok", "Cancelar");
+
+                        if (alertResult)
+                            await Navigation.PushAsync(new SettingsPage());
+                    });
+                }
+
+                privateKey = null;
+            });
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            Task.Delay(TimeSpan.FromSeconds(1))
+                .ContinueWith(_ => CheckPrivateKey.Execute(null));
         }
 
         private void ResetViewModel()
