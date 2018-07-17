@@ -35,9 +35,14 @@
                     <Button AutomationId="0" Text="0" Clicked="Number_Clicked" />
                 </StackLayout>
                 <StackLayout Padding="13" Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
-                    <Button Style="{StaticResource ButtonPrimary}" AutomationId="clean" Text="Limpar"
-                            Clicked="Clean_Clicked" />
-                    <Button Style="{StaticResource ButtonPrimary}" AutomationId="ok" Text="Pagar" Clicked="Pay_Clicked" />
+                    <Button
+                        IsEnabled="{Binding IsBusy, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}"
+                        Style="{StaticResource ButtonPrimary}" AutomationId="clean" Text="Limpar"
+                        Clicked="Clean_Clicked" />
+                    <Button
+                        IsEnabled="{Binding IsBusy, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}"
+                        Style="{StaticResource ButtonPrimary}" AutomationId="ok"
+                        Text="Pagar" Clicked="Pay_Clicked" />
                 </StackLayout>
             </StackLayout>
         </StackLayout>

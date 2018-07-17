@@ -2,6 +2,7 @@
 
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:BitcoinPOS_App.Converters;assembly=BitcoinPOS_App"
              x:Class="BitcoinPOS_App.App">
     <Application.Resources>
         <ResourceDictionary>
@@ -29,6 +30,9 @@
 
                 <Setter Property="HorizontalOptions" Value="Center" />
             </Style>
+
+            <!-- Global Converters -->
+            <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>
