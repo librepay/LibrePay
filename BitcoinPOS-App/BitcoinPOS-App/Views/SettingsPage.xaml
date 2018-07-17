@@ -10,7 +10,7 @@
         <StackLayout Margin="10">
             <Label Text="Private Key" />
             <Editor Text="{Binding PrivateKey}" HeightRequest="200"/>
-            <Button Text="Salvar" Clicked="Save_Clicked" />
+            <Button Style="{StaticResource ButtonPrimary}" Text="Salvar" Clicked="Save_Clicked" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

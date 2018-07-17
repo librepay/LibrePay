@@ -10,31 +10,31 @@
         <ToolbarItem AutomationId="toolbarbtn_settings" Text="Opções" Clicked="Settings_Clicked" />
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <StackLayout Padding="10">
+        <StackLayout Margin="10" HorizontalOptions="CenterAndExpand" VerticalOptions="FillAndExpand">
             <!-- Place new controls here -->
             <Editor IsEnabled="False" Text="{Binding TransactionValue, Mode=OneWay, StringFormat='{0:C}'}"
-                    HeightRequest="150" />
-            <StackLayout>
-                <StackLayout Padding="13" Orientation="Horizontal">
+                    HeightRequest="150" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand" />
+            <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
                     <Button AutomationId="7" Text="7" Clicked="Number_Clicked" />
                     <Button AutomationId="8" Text="8" Clicked="Number_Clicked" />
                     <Button AutomationId="9" Text="9" Clicked="Number_Clicked" />
                 </StackLayout>
-                <StackLayout Padding="13" Orientation="Horizontal">
+                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
                     <Button AutomationId="4" Text="4" Clicked="Number_Clicked" />
                     <Button AutomationId="5" Text="5" Clicked="Number_Clicked" />
                     <Button AutomationId="6" Text="6" Clicked="Number_Clicked" />
                 </StackLayout>
-                <StackLayout Padding="13" Orientation="Horizontal">
+                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
                     <Button AutomationId="3" Text="3" Clicked="Number_Clicked" />
                     <Button AutomationId="2" Text="2" Clicked="Number_Clicked" />
                     <Button AutomationId="1" Text="1" Clicked="Number_Clicked" />
                 </StackLayout>
-                <StackLayout Padding="13" Orientation="Horizontal">
+                <StackLayout Padding="13" Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
                     <Button AutomationId="virgula" Text="," Clicked="Number_Clicked" />
                     <Button AutomationId="0" Text="0" Clicked="Number_Clicked" />
                 </StackLayout>
-                <StackLayout Padding="13" Orientation="Horizontal">
+                <StackLayout Padding="13" Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
                     <Button Style="{StaticResource ButtonPrimary}" AutomationId="clean" Text="Limpar"
                             Clicked="Clean_Clicked" />
                     <Button Style="{StaticResource ButtonPrimary}" AutomationId="ok" Text="Pagar" Clicked="Pay_Clicked" />
