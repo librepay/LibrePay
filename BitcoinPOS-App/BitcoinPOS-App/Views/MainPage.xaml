@@ -1,19 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                  xmlns:local="clr-namespace:BitcoinPOS_App"
-                  xmlns:views="clr-namespace:BitcoinPOS_App.Views"
-                  x:Class="BitcoinPOS_App.Views.MainPage"
-                  Title="Bitcoin POS">
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:BitcoinPOS_App"
+             xmlns:views="clr-namespace:BitcoinPOS_App.Views"
+             x:Class="BitcoinPOS_App.Views.MainPage"
+             Title="Bitcoin POS">
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Opções" Clicked="Settings_Clicked" />
+        <ToolbarItem AutomationId="toolbarbtn_settings" Text="Opções" Clicked="Settings_Clicked" />
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout Padding="10">
             <!-- Place new controls here -->
-            <Editor IsEnabled="False" Text="{Binding TransactionValue, Mode=OneWay, StringFormat='{0:C}'}" HeightRequest="150" />
-            <StackLayout x:Name="BoxNumbers">
+            <Editor IsEnabled="False" Text="{Binding TransactionValue, Mode=OneWay, StringFormat='{0:C}'}"
+                    HeightRequest="150" />
+            <StackLayout>
                 <StackLayout Padding="13" Orientation="Horizontal">
                     <Button AutomationId="7" Text="7" Clicked="Number_Clicked" />
                     <Button AutomationId="8" Text="8" Clicked="Number_Clicked" />
@@ -32,6 +33,10 @@
                 <StackLayout Padding="13" Orientation="Horizontal">
                     <Button AutomationId="virgula" Text="," Clicked="Number_Clicked" />
                     <Button AutomationId="0" Text="0" Clicked="Number_Clicked" />
+                </StackLayout>
+                <StackLayout Padding="13" Orientation="Horizontal">
+                    <Button Style="{StaticResource ButtonPrimary}" AutomationId="clean" Text="Limpar"
+                            Clicked="Clean_Clicked" />
                     <Button Style="{StaticResource ButtonPrimary}" AutomationId="ok" Text="Pagar" Clicked="Pay_Clicked" />
                 </StackLayout>
             </StackLayout>

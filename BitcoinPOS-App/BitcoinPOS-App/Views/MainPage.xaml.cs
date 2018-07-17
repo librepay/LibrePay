@@ -8,15 +8,20 @@ namespace BitcoinPOS_App.Views
 {
     public partial class MainPage : ContentPage
     {
-        private readonly MainPageViewModel _viewModel;
+        private MainPageViewModel _viewModel;
         private readonly IMessageDisplayer _msgDisplayer;
 
         public MainPage()
         {
             InitializeComponent();
 
-            BindingContext = _viewModel = new MainPageViewModel();
+            ResetViewModel();
             _msgDisplayer = DependencyService.Get<IMessageDisplayer>();
+        }
+
+        private void ResetViewModel()
+        {
+            BindingContext = _viewModel = new MainPageViewModel();
         }
 
         private async void Settings_Clicked(object sender, EventArgs e)
@@ -43,6 +48,7 @@ namespace BitcoinPOS_App.Views
             var values = _viewModel.TransactionValueStr.Split(',');
             if (values.Length > 1 && values[1].Length == 3)
             {
+                Debug.WriteLine("Mostrou msg de valor arredondado");
                 await _msgDisplayer.ShowMessageAsync("O valor será arredondado!");
             }
 
@@ -51,7 +57,18 @@ namespace BitcoinPOS_App.Views
 
         private void Pay_Clicked(object sender, EventArgs e)
         {
-            Debug.WriteLine($"Pagar: {_viewModel.TransactionValue}");
+            Debug.WriteLine($"Pagar pressionado: {_viewModel.TransactionValue}");
+
+            if (_viewModel.TransactionValue == 0)
+                return;
+
+            Debug.WriteLine("Seguindo com o pagamento");
+        }
+
+        private void Clean_Clicked(object sender, EventArgs e)
+        {
+            Debug.WriteLine("Limpar pressionado");
+            ResetViewModel();
         }
     }
 }
