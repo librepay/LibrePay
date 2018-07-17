@@ -1,7 +1,19 @@
-﻿namespace BitcoinPOS_App
+﻿using NBitcoin;
+
+namespace BitcoinPOS_App
 {
     public static class Constants
     {
-        public const string SettingPrivateKey = "private-key";
+        public const string SettingsXPubKey = "xpub-key";
+
+        public static readonly Network NetworkInUse =
+#if DEBUG
+                Network.TestNet
+#else
+                Network.Main
+#endif
+            ;
+
+        public const string LastId = "last-used-id";
     }
 }

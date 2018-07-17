@@ -2,18 +2,22 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 using BitcoinPOS_App.Interfaces;
+using BitcoinPOS_App.Models;
 using BitcoinPOS_App.ViewModels;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace BitcoinPOS_App.Views
 {
-    public partial class MainPage : ContentPage
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class MainPage
     {
         private MainPageViewModel _viewModel;
         private readonly IMessageDisplayer _msgDisplayer;
         private readonly ISettingsProvider _settingsProvider;
+        private readonly IPaymentService _paymentService;
 
-        public Command CheckPrivateKey { get; set; }
+        public Command CheckXPubKey { get; }
 
         public MainPage()
         {
@@ -22,29 +26,34 @@ namespace BitcoinPOS_App.Views
             ResetViewModel();
             _msgDisplayer = DependencyService.Get<IMessageDisplayer>();
             _settingsProvider = DependencyService.Get<ISettingsProvider>();
+            _paymentService = DependencyService.Get<IPaymentService>();
 
-            CheckPrivateKey = new Command(async () =>
+            CheckXPubKey = new Command(async () =>
             {
-                Debug.WriteLine("Checkando se tem private key configurada...");
-                var privateKey = await _settingsProvider.GetSecureValueAsync<string>(Constants.SettingPrivateKey);
+                var xpubExists = await CheckXPubExists();
 
-                if (string.IsNullOrWhiteSpace(privateKey))
+                if (xpubExists)
+                    return;
+
+                Debug.WriteLine("Pedindo para o usuário configurar a xpub key");
+
+                Device.BeginInvokeOnMainThread(async () =>
                 {
-                    Debug.WriteLine("Pedindo para o usuário configurar a private key");
+                    var alertResult = await DisplayAlert("Configurações",
+                        "Para usar o aplicativo é necessário configurar uma Extended Public Key para poder gerar endereços de pagamento.",
+                        "Ok", "Cancelar");
 
-                    Device.BeginInvokeOnMainThread(async () =>
-                    {
-                        var alertResult = await DisplayAlert("Configurações",
-                            "Para usar o aplicativo é necessário configurar uma chave privada para poder gerar endereços de pagamento.",
-                            "Ok", "Cancelar");
-
-                        if (alertResult)
-                            await Navigation.PushAsync(new SettingsPage());
-                    });
-                }
-
-                privateKey = null;
+                    if (alertResult)
+                        await Navigation.PushAsync(new SettingsPage());
+                });
             });
+        }
+
+        private async Task<bool> CheckXPubExists()
+        {
+            Debug.WriteLine("Checkando se tem xpub key configurada...");
+            var xpub = await _settingsProvider.GetSecureValueAsync<string>(Constants.SettingsXPubKey);
+            return !string.IsNullOrWhiteSpace(xpub);
         }
 
         protected override void OnAppearing()
@@ -52,7 +61,7 @@ namespace BitcoinPOS_App.Views
             base.OnAppearing();
 
             Task.Delay(TimeSpan.FromSeconds(1))
-                .ContinueWith(_ => CheckPrivateKey.Execute(null));
+                .ContinueWith(_ => CheckXPubKey.Execute(null));
         }
 
         private void ResetViewModel()
@@ -91,14 +100,45 @@ namespace BitcoinPOS_App.Views
             Debug.WriteLine($"Novo valor: {_viewModel.TransactionValueStr}");
         }
 
-        private void Pay_Clicked(object sender, EventArgs e)
+        private async void Pay_Clicked(object sender, EventArgs e)
         {
             Debug.WriteLine($"Pagar pressionado: {_viewModel.TransactionValue}");
 
-            if (_viewModel.TransactionValue == 0)
+            if (_viewModel.TransactionValue == 0 || _viewModel.IsBusy)
                 return;
 
             Debug.WriteLine("Seguindo com o pagamento");
+
+            var xpubExists = await CheckXPubExists();
+
+            if (!xpubExists)
+            {
+                await _msgDisplayer.ShowMessageAsync("Configure a sua Extended Public Key antes...");
+                return;
+            }
+
+            _viewModel.IsBusy = true;
+            Debug.WriteLine("Seguindo com o pagamento");
+
+            try
+            {
+                Debug.WriteLine("Gerando pagamento...");
+
+                var payment = new Payment(_viewModel);
+                await _paymentService.GeneratePaymentAddressAsync(payment);
+
+                Debugger.Break();
+                Debug.WriteLine($"Gerou endereço: {payment}");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                await _msgDisplayer.ShowMessageAsync("Aconteceu um erro.");
+            }
+            finally
+            {
+                _viewModel.IsBusy = false;
+            }
         }
 
         private void Clean_Clicked(object sender, EventArgs e)

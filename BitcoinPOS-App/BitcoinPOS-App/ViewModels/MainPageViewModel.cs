@@ -5,6 +5,8 @@ namespace BitcoinPOS_App.ViewModels
     public class MainPageViewModel : BaseViewModel
     {
         private decimal _transactionValue = decimal.Zero;
+        private string _transactionValueStr;
+        private bool _isBusy;
 
         public decimal TransactionValue
         {
@@ -12,17 +14,21 @@ namespace BitcoinPOS_App.ViewModels
             set => SetProperty(ref _transactionValue, value);
         }
 
-        private string _transactionValueStr;
-
         public string TransactionValueStr
         {
             get => _transactionValueStr;
             set => SetProperty(ref _transactionValueStr, value);
         }
 
+        public bool IsBusy
+        {
+            get => _isBusy;
+            set => SetProperty(ref _isBusy, value);
+        }
+
         public MainPageViewModel()
         {
-            base.PropertyChanged += MainPageViewModel_PropertyChanged;
+            PropertyChanged += MainPageViewModel_PropertyChanged;
         }
 
         private void MainPageViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)

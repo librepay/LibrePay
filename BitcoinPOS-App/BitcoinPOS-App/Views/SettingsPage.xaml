@@ -7,9 +7,9 @@
         <ToolbarItem Text="Salvar" Clicked="Save_Clicked" />
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <StackLayout Margin="10">
-            <Label Text="Private Key" />
-            <Editor Text="{Binding PrivateKey}" HeightRequest="200"/>
+        <StackLayout x:Name="SettingsStack" Margin="10">
+            <Label Text="Extended Public Key (BIP32)" />
+            <Editor Text="{Binding ExtendedPublicKey}" HeightRequest="200"/>
             <Button Style="{StaticResource ButtonPrimary}" Text="Salvar" Clicked="Save_Clicked" />
         </StackLayout>
     </ContentPage.Content>

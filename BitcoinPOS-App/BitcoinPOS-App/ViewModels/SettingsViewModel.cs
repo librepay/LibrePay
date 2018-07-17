@@ -4,11 +4,11 @@
     {
         public bool IsLoaded { get; set; }
 
-        private string _privateKey;
-        public string PrivateKey
+        private string _extendedPublicKey;
+        public string ExtendedPublicKey
         {
-            get => _privateKey;
-            set => SetProperty(ref _privateKey, value);
+            get => _extendedPublicKey;
+            set => SetProperty(ref _extendedPublicKey, value);
         }
     }
 }
