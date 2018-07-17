@@ -1,8 +1,8 @@
-﻿using BitcoinPOS_App.Interfaces;
-using BitcoinPOS_App.ViewModels;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using BitcoinPOS_App.Interfaces;
+using BitcoinPOS_App.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -35,8 +35,8 @@ namespace BitcoinPOS_App.Views
         {
             // tries to fetch the private key
             // then if it work changes the IsLoaded prop as true
-            // if it dosen't work shows a message that get users attention
-            _settingsProvider.GetSecureValueAsync<string>(Constants.Setting_PrivateKey)
+            // if it doesn't work shows a message that get users attention
+            _settingsProvider.GetSecureValueAsync<string>(Constants.SettingPrivateKey)
                 .ContinueWith(t =>
                 {
                     if (!t.IsFaulted)
@@ -61,7 +61,7 @@ namespace BitcoinPOS_App.Views
         private async void Save_Clicked(object sender, EventArgs e)
         {
             // saves the current private key
-            await _settingsProvider.SetSecureValueAsync(Constants.Setting_PrivateKey, _viewModel.PrivateKey);
+            await _settingsProvider.SetSecureValueAsync(Constants.SettingPrivateKey, _viewModel.PrivateKey);
 
             // go back to the main page
             await Navigation.PopAsync();

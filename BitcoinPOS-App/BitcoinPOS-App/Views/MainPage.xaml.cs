@@ -1,8 +1,8 @@
 ﻿using System;
-using Xamarin.Forms;
 using System.Diagnostics;
-using BitcoinPOS_App.ViewModels;
 using BitcoinPOS_App.Interfaces;
+using BitcoinPOS_App.ViewModels;
+using Xamarin.Forms;
 
 namespace BitcoinPOS_App.Views
 {

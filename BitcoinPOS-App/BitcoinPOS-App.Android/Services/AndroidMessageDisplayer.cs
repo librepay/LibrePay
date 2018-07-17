@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Android.App;
 using Android.Widget;
+using BitcoinPOS_App.Droid.Services;
 using BitcoinPOS_App.Interfaces;
+using Xamarin.Forms;
+using Application = Android.App.Application;
 
-[assembly: Xamarin.Forms.Dependency(typeof(BitcoinPOS_App.Droid.Services.AndroidMessageDisplayer))]
+[assembly: Dependency(typeof(AndroidMessageDisplayer))]
 
 namespace BitcoinPOS_App.Droid.Services
 {

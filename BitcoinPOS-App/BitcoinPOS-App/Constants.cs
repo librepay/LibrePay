@@ -2,6 +2,6 @@
 {
     public static class Constants
     {
-        public const string Setting_PrivateKey = "private-key";
+        public const string SettingPrivateKey = "private-key";
     }
 }
