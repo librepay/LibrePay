@@ -16,9 +16,13 @@ namespace BitcoinPOS_App.Converters
 
             var payment = (Payment) value;
 
+            if (string.IsNullOrWhiteSpace(payment.Address) || payment.Value <= 0)
+                return null;
+
             var generator = new PayloadGenerator.BitcoinAddress(
                 payment.Address
                 , System.Convert.ToDouble(payment.Value)
+                , label: "Pagamento Bitcoin POS"
             );
             var payload = generator.ToString();
 
