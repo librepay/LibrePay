@@ -11,7 +11,7 @@
                    Source="{Binding Payment, Mode=OneWay, Converter={StaticResource QrCodeConverter}}" />
             <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
                 <Button Style="{StaticResource ButtonPrimary}" Text="Cancelar" Clicked="Cancel_Clicked" />
-                <Button Style="{StaticResource ButtonPrimary}" Text="Ok" Clicked="Ok_Clicked" />
+                <Button Margin="25, 0, 0, 0" Style="{StaticResource ButtonPrimary}" Text="Ok" Clicked="Ok_Clicked" />
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>

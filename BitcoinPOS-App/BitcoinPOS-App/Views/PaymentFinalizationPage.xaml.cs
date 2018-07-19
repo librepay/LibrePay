@@ -1,5 +1,7 @@
 ﻿using System;
+using BitcoinPOS_App.Interfaces;
 using BitcoinPOS_App.ViewModels;
+using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace BitcoinPOS_App.Views
@@ -8,11 +10,14 @@ namespace BitcoinPOS_App.Views
     public partial class PaymentFinalizationPage
     {
         private readonly PaymentFinalizationViewModel _viewModel;
+        private readonly IMessageDisplayer _msgDisplayer;
 
         public PaymentFinalizationPage()
         {
             InitializeComponent();
             BindingContext = _viewModel = new PaymentFinalizationViewModel();
+
+            _msgDisplayer = DependencyService.Get<IMessageDisplayer>();
         }
 
         public PaymentFinalizationPage(PaymentFinalizationViewModel viewModel) : this()
@@ -20,14 +25,27 @@ namespace BitcoinPOS_App.Views
             BindingContext = _viewModel = viewModel;
         }
 
-        private void Cancel_Clicked(object sender, EventArgs e)
+        protected override bool OnBackButtonPressed()
         {
-            throw new NotImplementedException();
+            // while the payment isn't finished
+            // don't let the user go back
+            if (_viewModel.Payment.Done)
+            {
+                return base.OnBackButtonPressed();
+            }
+
+            _msgDisplayer.ShowMessageAsync("Pagamento ainda não confirmado...");
+            return true;
         }
 
-        private void Ok_Clicked(object sender, EventArgs e)
+        private async void Cancel_Clicked(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            await Navigation.PopModalAsync();
+        }
+
+        private async void Ok_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PopModalAsync();
         }
     }
 }
