@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using BitcoinPOS_App.ViewModels;
 
 namespace BitcoinPOS_App.Models
@@ -31,7 +32,8 @@ namespace BitcoinPOS_App.Models
 
         public Payment(MainPageViewModel viewModel)
         {
-            Value = viewModel.TransactionValue;
+            Value = Math.Round(viewModel.TransactionValue, 2, MidpointRounding.AwayFromZero);
+            Debug.WriteLine($"Valor arredondado de {viewModel.TransactionValue} => {Value}");
         }
     }
 }
