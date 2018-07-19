@@ -6,7 +6,7 @@
     <ContentPage.Content>
         <StackLayout>
             <Image HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"
-                   Source="{Binding Payment.Address, Mode=OneWay, Converter={StaticResource QrCodeConverter}}" />
+                   Source="{Binding Payment, Mode=OneWay, Converter={StaticResource QrCodeConverter}}" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
