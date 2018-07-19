@@ -31,6 +31,14 @@
                 <Setter Property="HorizontalOptions" Value="Center" />
             </Style>
 
+            <!-- Typography -->
+            <Style x:Key="HeaderText" TargetType="Label">
+                <Setter Property="VerticalOptions" Value="CenterAndExpand" />
+                <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
+                <Setter Property="FontSize" Value="28" />
+                <Setter Property="TextColor" Value="{StaticResource PrimaryColor}" />
+            </Style>
+
             <!-- Global Converters -->
             <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
             <converters:QrCodeConverter x:Key="QrCodeConverter" />

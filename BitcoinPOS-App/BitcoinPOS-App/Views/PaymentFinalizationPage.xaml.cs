@@ -1,4 +1,5 @@
-﻿using BitcoinPOS_App.ViewModels;
+﻿using System;
+using BitcoinPOS_App.ViewModels;
 using Xamarin.Forms.Xaml;
 
 namespace BitcoinPOS_App.Views
@@ -17,6 +18,16 @@ namespace BitcoinPOS_App.Views
         public PaymentFinalizationPage(PaymentFinalizationViewModel viewModel) : this()
         {
             BindingContext = _viewModel = viewModel;
+        }
+
+        private void Cancel_Clicked(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void Ok_Clicked(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }
