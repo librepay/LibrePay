@@ -127,8 +127,17 @@ namespace BitcoinPOS_App.Views
                 var payment = new Payment(_viewModel);
                 await _paymentService.GeneratePaymentAddressAsync(payment);
 
-                Debugger.Break();
-                Debug.WriteLine($"Gerou endereço: {payment}");
+                Debug.WriteLine($"Gerou endereço: {payment.Address}");
+
+                await Navigation.PushModalAsync(
+                    new PaymentFinalizationPage(
+                        new PaymentFinalizationViewModel
+                        {
+                            Payment = payment,
+                            ActionText = "Esperando pagamento"
+                        }
+                    )
+                );
             }
             catch (Exception ex)
             {
