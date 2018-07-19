@@ -33,6 +33,7 @@
 
             <!-- Global Converters -->
             <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+            <converters:QrCodeConverter x:Key="QrCodeConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>
