@@ -6,12 +6,16 @@
              Title="Finalização de Pgto">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="{Binding ActionText}" Style="{StaticResource HeaderText}" />
+            <Label Text="{Binding ActionText, Mode=OneWay}" Style="{StaticResource HeaderText}" />
             <Image HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"
                    Source="{Binding Payment, Mode=OneWay, Converter={StaticResource QrCodeConverter}}" />
+            <Label Text="{Binding Payment.Address, Mode=OneWay}" HorizontalOptions="CenterAndExpand"
+                   VerticalOptions="CenterAndExpand" />
             <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
                 <Button Style="{StaticResource ButtonPrimary}" Text="Cancelar" Clicked="Cancel_Clicked" />
-                <Button Margin="25, 0, 0, 0" Style="{StaticResource ButtonPrimary}" Text="Ok" Clicked="Ok_Clicked" />
+                <Button
+                    IsEnabled="{Binding Payment.Done, Mode=OneWay}"
+                    Margin="25, 0, 0, 0" Style="{StaticResource ButtonPrimary}" Text="Ok" Clicked="Ok_Clicked" />
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>

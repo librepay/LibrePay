@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Threading.Tasks;
 using BitcoinPOS_App.Interfaces;
+using BitcoinPOS_App.Models;
 using BitcoinPOS_App.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -11,18 +13,39 @@ namespace BitcoinPOS_App.Views
     {
         private readonly PaymentFinalizationViewModel _viewModel;
         private readonly IMessageDisplayer _msgDisplayer;
+        private readonly INetworkInfoProvider _netInfoProvider;
+        private BackgroundJob _backgroundJob;
 
-        public PaymentFinalizationPage()
+        public PaymentFinalizationPage(PaymentFinalizationViewModel viewModel)
         {
             InitializeComponent();
-            BindingContext = _viewModel = new PaymentFinalizationViewModel();
 
             _msgDisplayer = DependencyService.Get<IMessageDisplayer>();
+            _netInfoProvider = DependencyService.Get<INetworkInfoProvider>();
+
+            BindingContext = _viewModel = viewModel;
         }
 
-        public PaymentFinalizationPage(PaymentFinalizationViewModel viewModel) : this()
+        protected override void OnAppearing()
         {
-            BindingContext = _viewModel = viewModel;
+            base.OnAppearing();
+
+            if (!string.IsNullOrWhiteSpace(_viewModel.Payment.Address))
+            {
+                _backgroundJob = _netInfoProvider.WaitAddressReceiveAnyTransactionAsync(
+                    _viewModel.Payment.Address,
+                    () =>
+                    {
+                        Device.BeginInvokeOnMainThread(async () =>
+                        {
+                            _viewModel.Payment.Done = true;
+
+                            await _msgDisplayer.ShowMessageAsync("Pagamento efetuado!");
+                            await ExitPageAsync();
+                        });
+                    }
+                );
+            }
         }
 
         protected override bool OnBackButtonPressed()
@@ -40,11 +63,18 @@ namespace BitcoinPOS_App.Views
 
         private async void Cancel_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PopModalAsync();
+            await ExitPageAsync();
         }
 
         private async void Ok_Clicked(object sender, EventArgs e)
         {
+            await ExitPageAsync();
+        }
+
+        private async Task ExitPageAsync()
+        {
+            _backgroundJob?.Cancel();
+
             await Navigation.PopModalAsync();
         }
     }
