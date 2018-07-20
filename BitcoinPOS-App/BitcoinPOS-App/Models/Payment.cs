@@ -4,6 +4,7 @@ using BitcoinPOS_App.ViewModels;
 
 namespace BitcoinPOS_App.Models
 {
+    [DebuggerDisplay("#{Id} - {Address} - {Value:n2}", Name = "#{Id}")]
     public class Payment
     {
         private decimal _value;
