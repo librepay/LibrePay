@@ -38,9 +38,13 @@ namespace BitcoinPOS_App.Views
             };
             button.Clicked += (sender, args) =>
             {
-                var extKey = new ExtKey();
+                // create a mnemonic to easy the development process
+                // as almost every wallet accepts it
+                var mnemonic = new Mnemonic(Wordlist.English);
+                var extKey = mnemonic.DeriveExtKey();
                 var xpubKey = extKey.Neuter();
 
+                Debug.WriteLine($"Debug mnemonic: {mnemonic}");
                 Debug.WriteLine($"Debug xpriv ({Constants.NetworkInUse}): {extKey.ToString(Constants.NetworkInUse)}");
                 Debug.WriteLine($"Debug xpub  ({Constants.NetworkInUse}): {xpubKey.ToString(Constants.NetworkInUse)}");
 
