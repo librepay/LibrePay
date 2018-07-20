@@ -83,7 +83,7 @@ namespace BitcoinPOS_App.Views
 
             Debug.WriteLine($"Botão apertado: {bt.AutomationId}");
 
-            if (bt.AutomationId == "virgula" && _viewModel.TransactionValueStr.Contains(","))
+            if (bt.AutomationId == "virgula" && _viewModel.TransactionValueStr?.Contains(",") == true)
                 return;
 
             _viewModel.TransactionValueStr = _viewModel.TransactionValueStr + bt.Text;
