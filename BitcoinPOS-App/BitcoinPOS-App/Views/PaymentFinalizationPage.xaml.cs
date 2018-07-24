@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
-using BitcoinPOS_App.Interfaces;
 using BitcoinPOS_App.Interfaces.Devices;
 using BitcoinPOS_App.Interfaces.Providers;
 using BitcoinPOS_App.Models;
 using BitcoinPOS_App.ViewModels;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -33,6 +33,8 @@ namespace BitcoinPOS_App.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
+
+            CopyAddressToClipboard();
 
             StartBackgroundJob();
         }
@@ -88,6 +90,12 @@ namespace BitcoinPOS_App.Views
             StopBackgroundJob();
 
             await Navigation.PopModalAsync();
+        }
+
+        private void CopyAddressToClipboard()
+        {
+            Clipboard.SetText(_viewModel.Payment.Address);
+            _msgDisplayer.ShowMessageAsync("Copiado endereço");
         }
 
         #endregion
