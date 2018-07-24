@@ -6,6 +6,8 @@ namespace BitcoinPOS_App.Models
     {
         public decimal Rate { get; set; }
 
+        public string DisplayRate => $"฿/BRL {Rate:N2}";
+
         public DateTime Date { get; set; }
 
         public decimal GetExchangedValue(decimal valueFiat)

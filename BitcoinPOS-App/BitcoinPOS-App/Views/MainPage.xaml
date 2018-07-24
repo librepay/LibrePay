@@ -10,10 +10,12 @@
         <ToolbarItem AutomationId="toolbarbtn_settings" Text="Opções" Clicked="Settings_Clicked" />
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <StackLayout Margin="10" HorizontalOptions="CenterAndExpand" VerticalOptions="FillAndExpand">
-            <!-- Place new controls here -->
+        <StackLayout Margin="10" HorizontalOptions="CenterAndExpand" VerticalOptions="StartAndExpand">
+            <Label Text="{Binding BitcoinPrice.DisplayRate, Mode=OneWay}"
+                   Style="{StaticResource HeaderText}" HorizontalTextAlignment="End"
+                   HorizontalOptions="EndAndExpand" VerticalOptions="CenterAndExpand" />
             <Editor IsEnabled="False" Text="{Binding TransactionValue, Mode=OneWay, StringFormat='{0:C}'}"
-                    HeightRequest="150" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand" />
+                    HeightRequest="125" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand" />
             <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
                 <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
                     <Button AutomationId="7" Text="7" Clicked="Number_Clicked" />

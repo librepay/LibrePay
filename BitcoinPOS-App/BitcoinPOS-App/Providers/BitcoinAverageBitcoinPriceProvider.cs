@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 using BitcoinPOS_App.Interfaces.Providers;
 using BitcoinPOS_App.Models;
 using BitcoinPOS_App.Providers;
+using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json.Linq;
 using Polly;
+using Polly.Caching.Memory;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(BitcoinAverageBitcoinPriceProvider))]
@@ -22,6 +24,7 @@ namespace BitcoinPOS_App.Providers
     {
         private static readonly HttpClient HttpClient;
         private static readonly Policy<HttpResponseMessage> DefaultPolicy;
+        private static readonly Context LocalPriceContext = new Context("local-price");
 
         static BitcoinAverageBitcoinPriceProvider()
         {
@@ -35,21 +38,39 @@ namespace BitcoinPOS_App.Providers
                 Timeout = TimeSpan.FromSeconds(15)
             };
 
-            DefaultPolicy = Policy.HandleResult<HttpResponseMessage>(h => !h.IsSuccessStatusCode)
-                .Or<Exception>()
-                .WaitAndRetryAsync(
-                    retryCount: 3
-                    , sleepDurationProvider: i => TimeSpan.FromSeconds(3)
-                    , onRetry: (r, _, i) => Debug.WriteLine("[INFO] Tentando novamente chamada em BitcoinAverage." +
-                                                            $"\nErro anterior: {r.Exception}" +
-                                                            $"\nResultado anterior: {r.Result?.StatusCode}")
-                );
+            var policyBuilder = Policy.HandleResult<HttpResponseMessage>(h => !h.IsSuccessStatusCode)
+                .Or<Exception>();
+
+            IMemoryCache memoryCache = new MemoryCache(new MemoryCacheOptions());
+            var memoryCacheProvider = new MemoryCacheProvider(memoryCache);
+
+            DefaultPolicy = Policy.WrapAsync(
+                Policy.CacheAsync<HttpResponseMessage>(
+                    memoryCacheProvider
+                    , TimeSpan.FromMinutes(Constants.MinutesBetweenExchangePriceChecks)
+                    , (context, key, ex) => Debugger.Break()
+                )
+                , policyBuilder.WaitAndRetryForeverAsync(
+                    sleepDurationProvider: i => TimeSpan.FromSeconds(1)
+                    , onRetry: (r, _, i) => Debug.WriteLine(
+                        "[INFO] Tentando novamente chamada em BitcoinAverage." +
+                        $"\nErro anterior: {r.Exception}" +
+                        $"\nResultado anterior: {r.Result?.StatusCode}"
+                    )
+                )
+                , Policy.BulkheadAsync<HttpResponseMessage>(1)
+                , Policy.TimeoutAsync<HttpResponseMessage>(() => TimeSpan.FromSeconds(15))
+            ).WithPolicyKey("bitcoin-average");
         }
 
         public async Task<ExchangeRate> GetLocalBitcoinPrice()
         {
             var response = await DefaultPolicy
-                .ExecuteAsync(() => HttpClient.GetAsync("/indices/local/ticker/BTCBRL"));
+                .ExecuteAsync(_ =>
+                {
+                    Debug.WriteLine("[INFO] Buscando preço médio do dia no BitcoinAverage");
+                    return HttpClient.GetAsync("/indices/local/ticker/BTCBRL");
+                }, LocalPriceContext);
 
             var rawBody = await response.Content.ReadAsStringAsync();
             var json = JObject.Parse(rawBody);

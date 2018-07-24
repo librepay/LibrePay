@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using BitcoinPOS_App.Models;
 
 namespace BitcoinPOS_App.ViewModels
 {
@@ -7,6 +8,7 @@ namespace BitcoinPOS_App.ViewModels
         private decimal _transactionValue = decimal.Zero;
         private string _transactionValueStr;
         private bool _isBusy;
+        private ExchangeRate _bitcoinPrice;
 
         public decimal TransactionValue
         {
@@ -24,6 +26,12 @@ namespace BitcoinPOS_App.ViewModels
         {
             get => _isBusy;
             set => SetProperty(ref _isBusy, value);
+        }
+
+        public ExchangeRate BitcoinPrice
+        {
+            get => _bitcoinPrice;
+            set => SetProperty(ref _bitcoinPrice, value);
         }
 
         public MainPageViewModel()

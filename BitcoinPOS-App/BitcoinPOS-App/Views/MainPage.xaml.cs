@@ -17,6 +17,7 @@ namespace BitcoinPOS_App.Views
         private readonly IMessageDisplayer _msgDisplayer;
         private readonly ISettingsProvider _settingsProvider;
         private readonly IPaymentService _paymentService;
+        private readonly IBitcoinPriceProvider _bitcoinPriceProvider;
 
         public Command CheckXPubKey { get; }
 
@@ -24,10 +25,12 @@ namespace BitcoinPOS_App.Views
         {
             InitializeComponent();
 
-            ResetViewModel();
             _msgDisplayer = DependencyService.Get<IMessageDisplayer>();
             _settingsProvider = DependencyService.Get<ISettingsProvider>();
             _paymentService = DependencyService.Get<IPaymentService>();
+            _bitcoinPriceProvider = DependencyService.Get<IBitcoinPriceProvider>();
+
+            ResetViewModel();
 
             CheckXPubKey = new Command(async () =>
             {
@@ -50,12 +53,7 @@ namespace BitcoinPOS_App.Views
             });
         }
 
-        private async Task<bool> CheckXPubExists()
-        {
-            Debug.WriteLine("Checkando se tem xpub key configurada...");
-            var xpub = await _settingsProvider.GetSecureValueAsync<string>(Constants.SettingsXPubKey);
-            return !string.IsNullOrWhiteSpace(xpub);
-        }
+        #region Overrides
 
         protected override void OnAppearing()
         {
@@ -63,12 +61,31 @@ namespace BitcoinPOS_App.Views
 
             Task.Delay(TimeSpan.FromSeconds(1))
                 .ContinueWith(_ => CheckXPubKey.Execute(null));
+
+            _bitcoinPriceProvider
+                .GetLocalBitcoinPrice()
+                .ContinueWith(t => _viewModel.BitcoinPrice = t.Result, TaskContinuationOptions.OnlyOnRanToCompletion);
+        }
+
+        #endregion
+
+        private async Task<bool> CheckXPubExists()
+        {
+            Debug.WriteLine("Checkando se tem xpub key configurada...");
+            var xpub = await _settingsProvider.GetSecureValueAsync<string>(Constants.SettingsXPubKey);
+            return !string.IsNullOrWhiteSpace(xpub);
         }
 
         private void ResetViewModel()
         {
-            BindingContext = _viewModel = new MainPageViewModel();
+            BindingContext = _viewModel = new MainPageViewModel
+            {
+                // maintains this value 
+                BitcoinPrice = _viewModel?.BitcoinPrice
+            };
         }
+
+        #region Events
 
         private async void Settings_Clicked(object sender, EventArgs e)
         {
@@ -152,5 +169,7 @@ namespace BitcoinPOS_App.Views
             Debug.WriteLine("Limpar pressionado");
             ResetViewModel();
         }
+
+        #endregion
     }
 }

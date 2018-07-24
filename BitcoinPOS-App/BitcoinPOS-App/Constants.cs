@@ -17,5 +17,7 @@ namespace BitcoinPOS_App
         public const int BitcoinDecimals = 8;
 
         public const string LastId = "last-used-id";
+
+        public static int MinutesBetweenExchangePriceChecks = 1;
     }
 }
