@@ -51,6 +51,8 @@ namespace BitcoinPOS_App.Views
                         await Navigation.PushAsync(new SettingsPage());
                 });
             });
+
+            MessagingCenter.Subscribe<PaymentFinalizationPage>(this, "clean", _ => ResetViewModel());
         }
 
         #region Overrides

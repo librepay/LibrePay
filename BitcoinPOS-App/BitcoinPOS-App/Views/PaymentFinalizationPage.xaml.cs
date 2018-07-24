@@ -85,6 +85,8 @@ namespace BitcoinPOS_App.Views
             StopBackgroundJob();
 
             await Navigation.PopModalAsync();
+
+            MessagingCenter.Send(this, "clean");
         }
 
         private void CopyAddressToClipboard()
