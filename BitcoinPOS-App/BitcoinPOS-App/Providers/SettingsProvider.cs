@@ -5,8 +5,8 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
-using BitcoinPOS_App.Interfaces;
-using BitcoinPOS_App.Services;
+using BitcoinPOS_App.Interfaces.Providers;
+using BitcoinPOS_App.Providers;
 using Plugin.Settings;
 using Plugin.Settings.Abstractions;
 using Xamarin.Essentials;
@@ -14,7 +14,7 @@ using Xamarin.Forms;
 
 [assembly: Dependency(typeof(EssentialSettingsProvider))]
 
-namespace BitcoinPOS_App.Services
+namespace BitcoinPOS_App.Providers
 {
     public class EssentialSettingsProvider : ISettingsProvider
     {

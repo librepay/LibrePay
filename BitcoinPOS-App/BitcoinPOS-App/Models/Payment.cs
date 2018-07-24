@@ -13,7 +13,7 @@ namespace BitcoinPOS_App.Models
 
         public long Id { get; set; }
 
-        public decimal Value
+        public decimal ValueFiat
         {
             get => _value;
             set
@@ -21,9 +21,16 @@ namespace BitcoinPOS_App.Models
                 if (!string.IsNullOrWhiteSpace(Address))
                     throw new InvalidOperationException("Não é possível alterar o valor após iniciado o pagamento");
 
-                _value = value;
+                _value = Math.Round(value, 2, MidpointRounding.AwayFromZero);
+                Debug.WriteLine(
+                    $"[{nameof(Payment)}.{nameof(ValueFiat)}.Set] Valor arredondado de {value} => {_value}"
+                );
             }
         }
+
+        public decimal ValueBitcoin => ExchangeRate?.GetExchangedValue(ValueFiat) ?? 0M;
+
+        public ExchangeRate ExchangeRate { get; set; }
 
         public string Address { get; set; }
 
@@ -33,8 +40,7 @@ namespace BitcoinPOS_App.Models
 
         public Payment(MainPageViewModel viewModel)
         {
-            Value = Math.Round(viewModel.TransactionValue, 2, MidpointRounding.AwayFromZero);
-            Debug.WriteLine($"Valor arredondado de {viewModel.TransactionValue} => {Value}");
+            ValueFiat = viewModel.TransactionValue;
         }
     }
 }

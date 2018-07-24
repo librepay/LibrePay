@@ -14,6 +14,8 @@ namespace BitcoinPOS_App
 #endif
             ;
 
+        public const int BitcoinDecimals = 8;
+
         public const string LastId = "last-used-id";
     }
 }

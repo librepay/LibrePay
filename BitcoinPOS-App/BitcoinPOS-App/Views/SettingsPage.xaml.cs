@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 using BitcoinPOS_App.Interfaces;
+using BitcoinPOS_App.Interfaces.Devices;
+using BitcoinPOS_App.Interfaces.Providers;
 using BitcoinPOS_App.ViewModels;
 using NBitcoin;
 using Xamarin.Forms;

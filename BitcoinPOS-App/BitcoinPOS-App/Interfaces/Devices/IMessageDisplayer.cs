@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace BitcoinPOS_App.Interfaces
+namespace BitcoinPOS_App.Interfaces.Devices
 {
     public interface IMessageDisplayer
     {

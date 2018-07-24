@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using BitcoinPOS_App.Interfaces;
-using BitcoinPOS_App.Models;
+using BitcoinPOS_App.Interfaces.Devices;
+using BitcoinPOS_App.Interfaces.Providers;
+using BitcoinPOS_App.Interfaces.Services;
 using BitcoinPOS_App.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -124,10 +125,7 @@ namespace BitcoinPOS_App.Views
             {
                 Debug.WriteLine("Gerando pagamento...");
 
-                var payment = new Payment(_viewModel);
-                await _paymentService.GeneratePaymentAddressAsync(payment);
-
-                Debug.WriteLine($"Gerou endereço: {payment.Address}");
+                var payment = await _paymentService.GenerateNewPayment(_viewModel);
 
                 await Navigation.PushModalAsync(
                     new PaymentFinalizationPage(

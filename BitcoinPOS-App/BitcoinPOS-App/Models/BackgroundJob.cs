@@ -10,11 +10,14 @@ namespace BitcoinPOS_App.Models
 
         public BackgroundJob(Thread thread)
         {
+            Debug.WriteLine("[INFO] Criando novo background job.");
             _thread = thread;
         }
 
         public void Cancel()
         {
+            Debug.WriteLine("[INFO] Finalizando background job.");
+
             if (_thread != null)
             {
                 try

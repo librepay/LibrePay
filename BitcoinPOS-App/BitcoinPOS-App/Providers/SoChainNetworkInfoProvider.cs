@@ -3,16 +3,16 @@ using System.Diagnostics;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
-using BitcoinPOS_App.Interfaces;
+using BitcoinPOS_App.Interfaces.Providers;
 using BitcoinPOS_App.Models;
-using BitcoinPOS_App.Services;
+using BitcoinPOS_App.Providers;
 using NBitcoin;
 using Newtonsoft.Json.Linq;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(SoChainNetworkInfoProvider))]
 
-namespace BitcoinPOS_App.Services
+namespace BitcoinPOS_App.Providers
 {
     /// <summary>
     /// Uses SoChain's API (https://chain.so/api) to get network information
@@ -58,6 +58,7 @@ namespace BitcoinPOS_App.Services
             {
                 while (true)
                 {
+                    Debug.WriteLine($"[API/SoChain]: Realizando chamada. Address: {address}");
                     var response = await HttpClient.GetAsync($"/api/v2/get_tx_received/{SoChainNetwork}/{address}");
 
                     if (response.IsSuccessStatusCode)
@@ -95,7 +96,7 @@ namespace BitcoinPOS_App.Services
                 }
             })
             {
-                Name = "so-chain-addr-check",
+                Name = $"so-chain-addr-check: {address}",
                 IsBackground = true
             };
 

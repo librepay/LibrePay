@@ -16,12 +16,12 @@ namespace BitcoinPOS_App.Converters
 
             var payment = (Payment) value;
 
-            if (string.IsNullOrWhiteSpace(payment.Address) || payment.Value <= 0)
+            if (string.IsNullOrWhiteSpace(payment.Address) || payment.ValueBitcoin <= 0)
                 return null;
 
             var generator = new PayloadGenerator.BitcoinAddress(
                 payment.Address
-                , System.Convert.ToDouble(payment.Value)
+                , System.Convert.ToDouble(payment.ValueBitcoin)
                 , label: "Pagamento Bitcoin POS"
             );
             var payload = generator.ToString();
@@ -40,7 +40,7 @@ namespace BitcoinPOS_App.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            throw new InvalidOperationException();
         }
     }
 }

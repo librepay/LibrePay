@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
-using BitcoinPOS_App.Interfaces;
+using BitcoinPOS_App.Interfaces.Providers;
+using BitcoinPOS_App.Interfaces.Services;
 using BitcoinPOS_App.Models;
 using BitcoinPOS_App.Services;
+using BitcoinPOS_App.ViewModels;
 using NBitcoin;
 using Xamarin.Forms;
 
@@ -13,12 +15,13 @@ namespace BitcoinPOS_App.Services
     public class PaymentService : IPaymentService
     {
         private readonly ISettingsProvider _settingsProvider;
+        private readonly IBitcoinPriceProvider _btcPriceProvider;
 
         public PaymentService()
         {
             _settingsProvider = DependencyService.Get<ISettingsProvider>();
+            _btcPriceProvider = DependencyService.Get<IBitcoinPriceProvider>();
         }
-
 
         public async Task<Payment> GeneratePaymentAddressAsync(Payment payment)
         {
@@ -37,6 +40,20 @@ namespace BitcoinPOS_App.Services
                 .GetAddress(Constants.NetworkInUse)
                 .ToString();
             payment.Done = false;
+
+            return payment;
+        }
+
+        public async Task<Payment> GenerateNewPayment(MainPageViewModel viewModel)
+        {
+            if (viewModel == null)
+                throw new ArgumentNullException(nameof(viewModel));
+
+            var payment = new Payment(viewModel);
+
+            await GeneratePaymentAddressAsync(payment);
+
+            payment.ExchangeRate = await _btcPriceProvider.GetLocalBitcoinPrice();
 
             return payment;
         }
