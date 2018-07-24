@@ -131,8 +131,7 @@ namespace BitcoinPOS_App.Views
                     new PaymentFinalizationPage(
                         new PaymentFinalizationViewModel
                         {
-                            Payment = payment,
-                            ActionText = "Esperando pagamento"
+                            Payment = payment
                         }
                     )
                 );
