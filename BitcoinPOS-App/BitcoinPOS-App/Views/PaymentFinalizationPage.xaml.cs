@@ -78,11 +78,11 @@ namespace BitcoinPOS_App.Views
 
         #region Page Logic
 
-        private async Task AcceptPaymentAsync(decimal amount)
+        private async Task AcceptPaymentAsync(decimal value)
         {
             _viewModel.Payment.Done = true;
 
-            await _msgDisplayer.ShowMessageAsync($"Pagamento efetuado!\nPago: {amount:N8}");
+            await _msgDisplayer.ShowMessageAsync($"Pagamento efetuado!\nPago: {value:N8}");
             await ExitPageAsync();
         }
 
@@ -113,8 +113,14 @@ namespace BitcoinPOS_App.Views
             StopBackgroundJob();
 
             _backgroundJob = _netInfoProvider.WaitCompletePayment(
-                _viewModel.Payment,
-                amount => Device.BeginInvokeOnMainThread(async () => await AcceptPaymentAsync(amount))
+                _viewModel.Payment
+                , value => Device.BeginInvokeOnMainThread(async () => await AcceptPaymentAsync(value))
+                , (totalValue, txValue) => Device.BeginInvokeOnMainThread(
+                    () => _msgDisplayer.ShowMessageAsync(
+                        $"Valor recebido: {totalValue:N8}\n" +
+                        $"Aguardando o restante ({(_viewModel.Payment.ValueBitcoin - totalValue):N8})..."
+                    )
+                )
             );
         }
 

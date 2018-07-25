@@ -54,7 +54,11 @@ namespace BitcoinPOS_App.Providers
             );
         }
 
-        public BackgroundJob WaitCompletePayment(Payment payment, Action<decimal> onComplete)
+        public BackgroundJob WaitCompletePayment(
+            Payment payment
+            , Action<decimal> onComplete
+            , Action<decimal, decimal> onReceiveTx = null
+        )
         {
             if (payment == null) throw new ArgumentNullException(nameof(payment));
             if (onComplete == null) throw new ArgumentNullException(nameof(onComplete));
@@ -63,10 +67,16 @@ namespace BitcoinPOS_App.Providers
                 return null;
 
             var valueBtc = payment.ValueBitcoin;
+            var knownTransactions = new Transaction[0];
 
             return NotifyTransactionsOfAAddress(payment.Address, transactions =>
             {
-                var totalValue = transactions.Sum(t => t.Value);
+                // order txs to facilitate notification
+                var txArr = transactions
+                    .OrderBy(t => t.Id)
+                    .ToArray();
+
+                var totalValue = txArr.Sum(t => t.Value);
 
                 if (totalValue >= valueBtc)
                 {
@@ -74,6 +84,16 @@ namespace BitcoinPOS_App.Providers
                     return true;
                 }
 
+                if (onReceiveTx != null && txArr.Length != knownTransactions.Length)
+                {
+                    // notifies new txs
+                    foreach (var tx in txArr.Skip(knownTransactions.Length - 1))
+                    {
+                        onReceiveTx(totalValue, tx.Value);
+                    }
+                }
+
+                knownTransactions = knownTransactions.Union(txArr).ToArray();
                 return false;
             });
         }

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using BitcoinPOS_App.Models;
 
 namespace BitcoinPOS_App.Interfaces.Providers
@@ -14,6 +13,15 @@ namespace BitcoinPOS_App.Interfaces.Providers
         /// The action to be taken when the payment is complete.<para />
         /// The first parameter is the amount sent to this address
         /// </param>
-        BackgroundJob WaitCompletePayment(Payment payment, Action<decimal> onComplete);
+        /// <param name="onReceiveTx">
+        /// Notifies when an amount is received.
+        /// The first parameter is the total amount.
+        /// The second is the tx amount.
+        /// </param>
+        BackgroundJob WaitCompletePayment(
+            Payment payment
+            , Action<decimal> onComplete
+            , Action<decimal, decimal> onReceiveTx = null
+        );
     }
 }
