@@ -9,10 +9,11 @@ using System.Threading;
 using BitcoinPOS_App.Interfaces.Providers;
 using BitcoinPOS_App.Models;
 using BitcoinPOS_App.Providers;
+using NBitcoin;
 using Newtonsoft.Json.Linq;
 using Polly;
 using Xamarin.Forms;
-using Network = NBitcoin.Network;
+using Transaction = BitcoinPOS_App.Models.Transaction;
 
 [assembly: Dependency(typeof(SoChainNetworkInfoProvider))]
 
@@ -25,7 +26,6 @@ namespace BitcoinPOS_App.Providers
     {
         private static readonly HttpClient HttpClient;
         private static readonly Policy<HttpResponseMessage> SoChainPolicy;
-        private static readonly string SoChainNetwork;
 
         static SoChainNetworkInfoProvider()
         {
@@ -52,20 +52,6 @@ namespace BitcoinPOS_App.Providers
                 , Policy.BulkheadAsync<HttpResponseMessage>(1)
                 , Policy.TimeoutAsync<HttpResponseMessage>(_ => TimeSpan.FromSeconds(5))
             );
-
-            if (Constants.NetworkInUse == Network.Main)
-            {
-                SoChainNetwork = "BTC";
-            }
-            else if (Constants.NetworkInUse == Network.TestNet)
-            {
-                SoChainNetwork = "BTCTEST";
-            }
-            else
-            {
-                SoChainNetwork = null;
-                Debug.WriteLine("ERRO: Network desconhecida!!!");
-            }
         }
 
         public BackgroundJob WaitCompletePayment(Payment payment, Action<decimal> onComplete)
@@ -117,13 +103,17 @@ namespace BitcoinPOS_App.Providers
         private void WatchAddressInSoChainApi(object @param)
         {
             var info = (WatcherInfo) @param;
+            var bitcoinAddress = Network.Parse<BitcoinAddress>(info.Address, null);
+            var network = bitcoinAddress.Network == Network.Main
+                ? "BTC"
+                : "BTCTEST";
 
             while (true)
             {
                 var response = SoChainPolicy.ExecuteAsync(() =>
                 {
                     Debug.WriteLine($"[API/SoChain]: Realizando chamada. Address: {info.Address}");
-                    return HttpClient.GetAsync($"/api/v2/get_tx_received/{SoChainNetwork}/{info.Address}");
+                    return HttpClient.GetAsync($"/api/v2/get_tx_received/{network}/{info.Address}");
                 }).Result;
 
                 if (!response.IsSuccessStatusCode)

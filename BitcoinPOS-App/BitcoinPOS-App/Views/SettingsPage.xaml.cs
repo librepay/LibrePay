@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using BitcoinPOS_App.Interfaces;
 using BitcoinPOS_App.Interfaces.Devices;
 using BitcoinPOS_App.Interfaces.Providers;
 using BitcoinPOS_App.ViewModels;
@@ -47,10 +46,10 @@ namespace BitcoinPOS_App.Views
                 var xpubKey = extKey.Neuter();
 
                 Debug.WriteLine($"Debug mnemonic: {mnemonic}");
-                Debug.WriteLine($"Debug xpriv ({Constants.NetworkInUse}): {extKey.ToString(Constants.NetworkInUse)}");
-                Debug.WriteLine($"Debug xpub  ({Constants.NetworkInUse}): {xpubKey.ToString(Constants.NetworkInUse)}");
+                Debug.WriteLine($"Debug xpriv: {extKey.ToString(Network.TestNet)}");
+                Debug.WriteLine($"Debug xpub: {xpubKey.ToString(Network.TestNet)}");
 
-                _settingsProvider.SetSecureValueAsync(Constants.SettingsXPubKey, xpubKey.ToString(Constants.NetworkInUse));
+                _settingsProvider.SetSecureValueAsync(Constants.SettingsXPubKey, xpubKey.ToString(Network.TestNet));
 
                 // reload settings
                 LoadSettingsCommand.Execute(null);
@@ -90,6 +89,7 @@ namespace BitcoinPOS_App.Views
         {
             // saves the current extended public key
             await _settingsProvider.SetSecureValueAsync(Constants.SettingsXPubKey, _viewModel.ExtendedPublicKey);
+            await _settingsProvider.SetValueAsync(Constants.LastId, 0L);
 
             // go back to the main page
             await Navigation.PopAsync();

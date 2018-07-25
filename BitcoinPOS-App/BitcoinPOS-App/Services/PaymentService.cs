@@ -29,7 +29,8 @@ namespace BitcoinPOS_App.Services
                 throw new ArgumentNullException(nameof(payment));
 
             var rawXPub = await _settingsProvider.GetSecureValueAsync<string>(Constants.SettingsXPubKey);
-            var xpub = new BitcoinExtPubKey(rawXPub, expectedNetwork: Constants.NetworkInUse).ExtPubKey;
+            var bitcoinExtPubKey = new BitcoinExtPubKey(rawXPub);
+            var xpub = bitcoinExtPubKey.ExtPubKey;
 
             var id = await _settingsProvider.GetValueAsync<long>(Constants.LastId) + 1L;
             await _settingsProvider.SetValueAsync(Constants.LastId, id);
@@ -37,7 +38,7 @@ namespace BitcoinPOS_App.Services
             payment.Id = id;
             payment.Address = xpub.Derive((uint) id)
                 .PubKey
-                .GetAddress(Constants.NetworkInUse)
+                .GetAddress(bitcoinExtPubKey.Network)
                 .ToString();
             payment.Done = false;
 
