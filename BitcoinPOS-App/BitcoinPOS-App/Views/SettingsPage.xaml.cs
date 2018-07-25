@@ -58,6 +58,14 @@ namespace BitcoinPOS_App.Views
 #endif
         }
 
+        protected override void OnAppearing()
+        {
+            //HACK: Editor doesn't allow selection (https://forums.xamarin.com/discussion/100000/editor-with-textproperty-does-not-support-text-selection)
+            edtXPub.IsEnabled = true;
+
+            base.OnAppearing();
+        }
+
         private void LoadSettingsCommandAction()
         {
             // tries to fetch the extended public key

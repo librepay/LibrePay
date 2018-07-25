@@ -9,7 +9,7 @@
     <ContentPage.Content>
         <StackLayout x:Name="SettingsStack" Margin="10">
             <Label Text="Extended Public Key (BIP32)" />
-            <Editor Text="{Binding ExtendedPublicKey}" HeightRequest="200"/>
+            <Editor x:Name="edtXPub" IsSpellCheckEnabled="False" IsEnabled="False" Text="{Binding ExtendedPublicKey}" HeightRequest="200"/>
             <Button Style="{StaticResource ButtonPrimary}" Text="Salvar" Clicked="Save_Clicked" />
         </StackLayout>
     </ContentPage.Content>
