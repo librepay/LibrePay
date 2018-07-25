@@ -120,7 +120,7 @@ namespace BitcoinPOS_App.Views
             Debug.WriteLine($"Novo valor: {_viewModel.TransactionValueStr}");
         }
 
-        private async void Pay_Clicked(object sender, EventArgs e)
+        private async void Receive_Clicked(object sender, EventArgs e)
         {
             Debug.WriteLine($"Pagar pressionado: {_viewModel.TransactionValue}");
 

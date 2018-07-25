@@ -44,7 +44,7 @@
                     <Button
                         IsEnabled="{Binding IsBusy, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}"
                         Style="{StaticResource ButtonPrimary}" AutomationId="ok"
-                        Text="Pagar" Clicked="Pay_Clicked" />
+                        Text="Receber" Clicked="Receive_Clicked" />
                 </StackLayout>
             </StackLayout>
         </StackLayout>
