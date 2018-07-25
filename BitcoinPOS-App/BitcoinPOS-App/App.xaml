@@ -38,6 +38,12 @@
                 <Setter Property="FontSize" Value="28" />
                 <Setter Property="TextColor" Value="{StaticResource PrimaryColor}" />
             </Style>
+            <Style x:Key="SubHeaderText" TargetType="Label">
+                <Setter Property="VerticalOptions" Value="CenterAndExpand" />
+                <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
+                <Setter Property="FontSize" Value="18" />
+                <Setter Property="TextColor" Value="Black" />
+            </Style>
 
             <!-- Global Converters -->
             <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />

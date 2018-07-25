@@ -68,6 +68,12 @@ namespace BitcoinPOS_App.Views
             await ExitPageAsync();
         }
 
+        private async void LabelCopy_Clicked(object sender, EventArgs e)
+        {
+            Clipboard.SetText(((Label) sender).Text);
+            await _msgDisplayer.ShowMessageAsync("Copiado");
+        }
+
         #endregion
 
         #region Page Logic

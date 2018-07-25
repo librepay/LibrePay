@@ -5,15 +5,34 @@
              x:Class="BitcoinPOS_App.Views.PaymentFinalizationPage"
              Title="Finalização de Pgto">
     <ContentPage.Content>
-        <StackLayout>
+        <StackLayout Margin="10">
             <Label Text="Aguardando pagamento" Style="{StaticResource HeaderText}" />
-            <Image HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"
+            <Image HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="0"
                    Source="{Binding Payment, Mode=OneWay, Converter={StaticResource QrCodeConverter}}" />
             <Label Text="{Binding Payment.Address, Mode=OneWay}" HorizontalOptions="CenterAndExpand"
-                   VerticalOptions="CenterAndExpand" />
-            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
-                <Button Style="{StaticResource ButtonPrimary}" Text="Cancelar" Clicked="Cancel_Clicked" />
+                   VerticalOptions="CenterAndExpand">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="LabelCopy_Clicked" />
+                </Label.GestureRecognizers>
+            </Label>
+
+            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                <Label Style="{StaticResource SubHeaderText}" Text="{Binding Payment.ValueBitcoin, Mode=OneWay}"
+                       HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="LabelCopy_Clicked" />
+                    </Label.GestureRecognizers>
+                </Label>
+                <Label Style="{StaticResource SubHeaderText}"
+                       Text="{Binding Payment.ValueFiat, Mode=OneWay, StringFormat='{0:C}'}"
+                       HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="LabelCopy_Clicked" />
+                    </Label.GestureRecognizers>
+                </Label>
             </StackLayout>
+
+            <Button Style="{StaticResource ButtonPrimary}" Text="Cancelar" Clicked="Cancel_Clicked" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
