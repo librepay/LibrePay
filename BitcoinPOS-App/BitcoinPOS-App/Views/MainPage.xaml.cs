@@ -127,8 +127,6 @@ namespace BitcoinPOS_App.Views
             if (_viewModel.TransactionValue == 0 || _viewModel.IsBusy)
                 return;
 
-            Debug.WriteLine("Seguindo com o pagamento");
-
             var xpubExists = await CheckXPubExists();
 
             if (!xpubExists)
@@ -142,9 +140,8 @@ namespace BitcoinPOS_App.Views
 
             try
             {
-                Debug.WriteLine("Gerando pagamento...");
-
                 var payment = await _paymentService.GenerateNewPayment(_viewModel);
+                Debug.WriteLine("Pagamento gerado: {0}", payment);
 
                 await Navigation.PushModalAsync(
                     new PaymentFinalizationPage(

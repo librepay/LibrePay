@@ -42,5 +42,14 @@ namespace BitcoinPOS_App.Models
         {
             ValueFiat = viewModel.TransactionValue;
         }
+
+        public override string ToString()
+        {
+            return $"Done: {(Done ? "Yes" : "No")}\n" +
+                   $"Address: {Address}\n" +
+                   $"BTC Value: {ValueBitcoin}\n" +
+                   $"FIAT Value: {ValueFiat}\n" +
+                   $"Exchange Rate: {ExchangeRate}";
+        }
     }
 }

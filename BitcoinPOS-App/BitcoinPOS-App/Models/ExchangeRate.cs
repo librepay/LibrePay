@@ -23,5 +23,11 @@ namespace BitcoinPOS_App.Models
             Rate = rate;
             Date = date;
         }
+
+        public override string ToString()
+        {
+            return $"Rate: {DisplayRate}\n" +
+                   $"Date: {Date}";
+        }
     }
 }

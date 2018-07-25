@@ -9,11 +9,10 @@ using System.Threading;
 using BitcoinPOS_App.Interfaces.Providers;
 using BitcoinPOS_App.Models;
 using BitcoinPOS_App.Providers;
-using NBitcoin;
 using Newtonsoft.Json.Linq;
 using Polly;
 using Xamarin.Forms;
-using Transaction = BitcoinPOS_App.Models.Transaction;
+using Network = NBitcoin.Network;
 
 [assembly: Dependency(typeof(SoChainNetworkInfoProvider))]
 
@@ -101,51 +100,54 @@ namespace BitcoinPOS_App.Providers
             if (address == null) throw new ArgumentNullException(nameof(address));
             if (onReceiveAnyTx == null) throw new ArgumentNullException(nameof(onReceiveAnyTx));
 
-            var thread = new Thread(async () =>
-            {
-                while (true)
-                {
-                    var response = await SoChainPolicy
-                        .ExecuteAsync(() =>
-                        {
-                            Debug.WriteLine($"[API/SoChain]: Realizando chamada. Address: {address}");
-                            return HttpClient.GetAsync($"/api/v2/get_tx_received/{SoChainNetwork}/{address}");
-                        });
-
-                    if (!response.IsSuccessStatusCode)
-                        continue;
-
-                    var jobj = JObject.Parse(await response.Content.ReadAsStringAsync());
-                    var txs = jobj["data"]["txs"];
-
-                    if (txs is JArray txArr && txArr.Count > 0)
-                    {
-                        var shouldBreak = false;
-
-                        try
-                        {
-                            shouldBreak = onReceiveAnyTx(GetTransactionsFromJArray(txArr));
-                        }
-                        catch (Exception e)
-                        {
-                            Debug.WriteLine(
-                                $"ERRO: Falha no callback ({nameof(NotifyTransactionsOfAAddress)}):" + e
-                            );
-                        }
-
-                        if (shouldBreak)
-                            break;
-                    }
-                }
-            })
+            var thread = new Thread(WatchAddressInSoChainApi)
             {
                 Name = $"so-chain-addr-checker: {address}",
                 IsBackground = true
             };
-
-            thread.Start();
+            thread.Start(new WatcherInfo
+            {
+                Address = address,
+                Callback = onReceiveAnyTx
+            });
 
             return new BackgroundJob(thread);
+        }
+
+        private void WatchAddressInSoChainApi(object @param)
+        {
+            var info = (WatcherInfo) @param;
+
+            while (true)
+            {
+                var response = SoChainPolicy.ExecuteAsync(() =>
+                {
+                    Debug.WriteLine($"[API/SoChain]: Realizando chamada. Address: {info.Address}");
+                    return HttpClient.GetAsync($"/api/v2/get_tx_received/{SoChainNetwork}/{info.Address}");
+                }).Result;
+
+                if (!response.IsSuccessStatusCode)
+                    continue;
+
+                var jobj = JObject.Parse(response.Content.ReadAsStringAsync().Result);
+                var txs = jobj["data"]["txs"];
+
+                if (!(txs is JArray txArr) || txArr.Count <= 0)
+                    continue;
+
+                var shouldBreak = false;
+                try
+                {
+                    shouldBreak = info.Callback(GetTransactionsFromJArray(txArr));
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine($"ERRO: Falha no callback ({nameof(NotifyTransactionsOfAAddress)}):" + e);
+                }
+
+                if (shouldBreak)
+                    break;
+            }
         }
 
         private IEnumerable<Transaction> GetTransactionsFromJArray(JArray txArr)
@@ -159,6 +161,13 @@ namespace BitcoinPOS_App.Providers
                     Id = tx.Value<string>("txid")
                 };
             }
+        }
+
+        private class WatcherInfo
+        {
+            public string Address { get; set; }
+
+            public Func<IEnumerable<Transaction>, bool> Callback { get; set; }
         }
     }
 }
