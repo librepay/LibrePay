@@ -87,7 +87,11 @@ namespace BitcoinPOS_App.Providers
                 if (onReceiveTx != null && txArr.Length != knownTransactions.Length)
                 {
                     // notifies new txs
-                    foreach (var tx in txArr.Skip(knownTransactions.Length - 1))
+                    var skp = knownTransactions.Length - 1;
+                    if (skp < 0)
+                        skp = 0;
+
+                    foreach (var tx in txArr.Skip(skp))
                     {
                         onReceiveTx(totalValue, tx.Value);
                     }
