@@ -23,7 +23,9 @@ namespace BitcoinPOS_App
             // Adds entropy to the random utility used by NBitcoin
             RandomUtils.AddEntropy($"bitcoin-pos-app-{DateTime.Now.Ticks}-{Device.RuntimePlatform}");
 
-            MainPage = new NavigationPage(new MainPage(new MainPageViewModel()));
+            MainPage = new NavigationPage(
+                Container.Resolve<MainPage>()
+            );
         }
 
         private void CreateDIContainer(Action<ContainerBuilder> configDI)

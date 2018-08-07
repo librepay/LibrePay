@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using BitcoinPOS_App.Interfaces.Devices;
 using BitcoinPOS_App.ViewModels;
@@ -13,11 +13,11 @@ namespace BitcoinPOS_App.Views
         private readonly PaymentFinalizationViewModel _viewModel;
         private readonly IMessageDisplayer _msgDisplayer;
 
-        public PaymentFinalizationPage(PaymentFinalizationViewModel viewModel)
+        public PaymentFinalizationPage(PaymentFinalizationViewModel viewModel, IMessageDisplayer msgDisplayer)
         {
             InitializeComponent();
 
-            _msgDisplayer = DependencyService.Get<IMessageDisplayer>();
+            _msgDisplayer = msgDisplayer;
 
             BindingContext = _viewModel = viewModel;
 

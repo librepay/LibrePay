@@ -18,9 +18,9 @@ namespace BitcoinPOS_App.ViewModels
             set => SetProperty(ref _payment, value);
         }
 
-        public PaymentFinalizationViewModel()
+        public PaymentFinalizationViewModel(INetworkInfoProvider netInfoProvider)
         {
-            _netInfoProvider = DependencyService.Get<INetworkInfoProvider>();
+            _netInfoProvider = netInfoProvider;
         }
 
         public void AcceptPayment(decimal value)

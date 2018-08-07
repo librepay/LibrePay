@@ -1,6 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
+using Autofac;
+using Autofac.Core;
+using Autofac.Core.Activators.Reflection;
 using BitcoinPOS_App.Interfaces.Devices;
+using BitcoinPOS_App.Models;
 using BitcoinPOS_App.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -13,13 +18,13 @@ namespace BitcoinPOS_App.Views
         private readonly MainPageViewModel _viewModel;
         private readonly IMessageDisplayer _msgDisplayer;
 
-        public MainPage(MainPageViewModel viewModel)
+        public MainPage(MainPageViewModel viewModel, IMessageDisplayer msgDisplayer)
         {
             InitializeComponent();
 
             BindingContext = _viewModel = viewModel;
 
-            _msgDisplayer = DependencyService.Get<IMessageDisplayer>();
+            _msgDisplayer = msgDisplayer;
 
             MessagingCenter.Subscribe<MainPageViewModel, bool>(
                 _viewModel
@@ -42,10 +47,15 @@ namespace BitcoinPOS_App.Views
                         );
 
                         if (alertResult)
-                            await Navigation.PushAsync(new SettingsPage());
+                            await OpenSettingsPageAsync();
                     });
                 }
             );
+        }
+
+        private async Task OpenSettingsPageAsync()
+        {
+            await Navigation.PushAsync(App.Container.Resolve<SettingsPage>());
         }
 
         protected override void OnAppearing()
@@ -58,17 +68,17 @@ namespace BitcoinPOS_App.Views
 
         private async void Settings_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new SettingsPage());
+            await OpenSettingsPageAsync();
         }
 
         private async void Receive_Clicked(object sender, EventArgs e)
         {
             Debug.WriteLine($"Pagar pressionado: {_viewModel.TransactionValue}", "UI");
 
-            PaymentFinalizationViewModel paymentViewModel = null;
+            Payment payment = null;
             try
             {
-                paymentViewModel = await _viewModel.PrepareToReceivePayment();
+                payment = await _viewModel.GenerateNewPayment();
             }
             catch (Exception ex)
             {
@@ -76,11 +86,19 @@ namespace BitcoinPOS_App.Views
                 await _msgDisplayer.ShowMessageAsync("Aconteceu um erro.");
             }
 
-            if (paymentViewModel != null)
+            if (payment != null)
             {
-                await Navigation.PushModalAsync(
-                    new PaymentFinalizationPage(paymentViewModel)
-                );
+                using (var scope = App.Container.BeginLifetimeScope())
+                {
+                    var vm = scope.Resolve<PaymentFinalizationViewModel>();
+                    vm.Payment = payment;
+
+                    await Navigation.PushModalAsync(
+                        scope.Resolve<PaymentFinalizationPage>(
+                            new TypedParameter(typeof(PaymentFinalizationViewModel), vm)
+                        )
+                    );
+                }
             }
         }
 

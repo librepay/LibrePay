@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -48,15 +48,20 @@ namespace BitcoinPOS_App.ViewModels
 
         public Command PinpadNumberCommand { get; }
 
-        public MainPageViewModel()
+        public MainPageViewModel(
+            IMessageDisplayer msgDisplayer
+            , IPaymentService paymentService
+            , ISettingsProvider settingsProvider
+            , IBitcoinPriceProvider bitcoinPriceProvider
+        )
         {
             PropertyChanged += MainPageViewModel_PropertyChanged;
             PinpadNumberCommand = new Command(SetPinpadNumber);
 
-            _msgDisplayer = DependencyService.Get<IMessageDisplayer>();
-            _paymentService = DependencyService.Get<IPaymentService>();
-            _settingsProvider = DependencyService.Get<ISettingsProvider>();
-            _bitcoinPriceProvider = DependencyService.Get<IBitcoinPriceProvider>();
+            _msgDisplayer = msgDisplayer;
+            _paymentService = paymentService;
+            _settingsProvider = settingsProvider;
+            _bitcoinPriceProvider = bitcoinPriceProvider;
 
             MessagingCenter.Subscribe<PaymentFinalizationViewModel>(
                 this
@@ -104,7 +109,7 @@ namespace BitcoinPOS_App.ViewModels
             IsBusy = false;
         }
 
-        public async Task<PaymentFinalizationViewModel> PrepareToReceivePayment()
+        public async Task<Payment> GenerateNewPayment()
         {
             if (TransactionValue == 0 || IsBusy)
                 return null;
@@ -118,10 +123,7 @@ namespace BitcoinPOS_App.ViewModels
                     .ConfigureAwait(false);
                 Debug.WriteLine("Pagamento gerado: {0}", payment);
 
-                return new PaymentFinalizationViewModel
-                {
-                    Payment = payment
-                };
+                return payment;
             }
             finally
             {

@@ -13,13 +13,13 @@ namespace BitcoinPOS_App.Views
         private readonly SettingsViewModel _viewModel;
         private readonly IMessageDisplayer _messageDisplayer;
 
-        public SettingsPage()
+        public SettingsPage(SettingsViewModel viewModel, IMessageDisplayer messageDisplayer)
         {
             InitializeComponent();
 
-            _messageDisplayer = DependencyService.Get<IMessageDisplayer>();
+            _messageDisplayer = messageDisplayer;
 
-            BindingContext = _viewModel = new SettingsViewModel();
+            BindingContext = _viewModel = viewModel;
 
             MessagingCenter.Subscribe<SettingsViewModel, Exception>(_viewModel
                 , MessengerKeys.SettingsFailedLoadSettings

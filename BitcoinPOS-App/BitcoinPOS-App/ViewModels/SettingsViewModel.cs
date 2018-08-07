@@ -18,9 +18,9 @@ namespace BitcoinPOS_App.ViewModels
             set => SetProperty(ref _extendedPublicKey, value);
         }
 
-        public SettingsViewModel()
+        public SettingsViewModel(ISettingsProvider settingsProvider)
         {
-            _settingsProvider = DependencyService.Get<ISettingsProvider>();
+            _settingsProvider = settingsProvider;
         }
 
         public async Task LoadSettingsAsync()

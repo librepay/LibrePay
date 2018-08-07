@@ -17,10 +17,13 @@ namespace BitcoinPOS_App.Services
         private readonly ISettingsProvider _settingsProvider;
         private readonly IBitcoinPriceProvider _btcPriceProvider;
 
-        public PaymentService()
+        public PaymentService(
+            ISettingsProvider settingsProvider
+            , IBitcoinPriceProvider btcPriceProvider
+        )
         {
-            _settingsProvider = DependencyService.Get<ISettingsProvider>();
-            _btcPriceProvider = DependencyService.Get<IBitcoinPriceProvider>();
+            _settingsProvider = settingsProvider;
+            _btcPriceProvider = btcPriceProvider;
         }
 
         public async Task<Payment> GeneratePaymentAddressAsync(Payment payment)
