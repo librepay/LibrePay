@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -105,7 +105,7 @@ namespace BitcoinPOS_App.ViewModels
         public void ResetPinpad()
         {
             Debug.WriteLine("Reiniciando o pinpad...");
-            TransactionValue = 0M;
+            TransactionValueStr = "0";
             IsBusy = false;
         }
 

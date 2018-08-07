@@ -58,5 +58,10 @@ namespace BitcoinPOS_App.ViewModels
         {
             _backgroundJob?.Cancel();
         }
+
+        public void NotifyMainPageOfPaymentFinalization()
+        {
+            MessagingCenter.Send(this, MessengerKeys.MainFinishPayment);
+        }
     }
 }

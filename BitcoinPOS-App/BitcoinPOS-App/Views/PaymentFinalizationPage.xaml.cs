@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using BitcoinPOS_App.Interfaces.Devices;
 using BitcoinPOS_App.ViewModels;
@@ -103,7 +103,7 @@ namespace BitcoinPOS_App.Views
 
             await Navigation.PopModalAsync();
 
-            MessagingCenter.Send(this, MessengerKeys.MainFinishPayment);
+            _viewModel.NotifyMainPageOfPaymentFinalization();
         }
     }
 }
