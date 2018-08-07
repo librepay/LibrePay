@@ -38,6 +38,13 @@ namespace BitcoinPOS_App.Models
         {
         }
 
+        public Payment(string address, decimal valueFiat, ExchangeRate exchangeRate)
+        {
+            ValueFiat = valueFiat;
+            Address = address;
+            ExchangeRate = exchangeRate;
+        }
+
         public Payment(MainPageViewModel viewModel)
         {
             ValueFiat = viewModel.TransactionValue;

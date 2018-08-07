@@ -11,13 +11,19 @@ namespace BitcoinPOS_App.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null || value.GetType() != typeof(Payment))
-                return null;
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
+            if (targetType == null)
+                throw new ArgumentNullException(nameof(targetType));
+            if (targetType != typeof(ImageSource))
+                throw new ArgumentException("Invalid target type", nameof(targetType));
+            if (!value.GetType().IsAssignableFrom(typeof(Payment)))
+                throw new ArgumentException("Invalid value type", nameof(value));
 
             var payment = (Payment) value;
 
             if (string.IsNullOrWhiteSpace(payment.Address) || payment.ValueBitcoin <= 0)
-                return null;
+                throw new ArgumentException("Invalid payment", nameof(value));
 
             var generator = new PayloadGenerator.BitcoinAddress(
                 payment.Address
