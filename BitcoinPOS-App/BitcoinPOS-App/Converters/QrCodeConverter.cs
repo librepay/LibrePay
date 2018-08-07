@@ -33,7 +33,6 @@ namespace BitcoinPOS_App.Converters
 
             // this memory stream should not be disposed here 
             var ms = new MemoryStream(qrCodeAsPngArray);
-            qrCodeAsPngArray = null;
 
             return ImageSource.FromStream(() => ms);
         }

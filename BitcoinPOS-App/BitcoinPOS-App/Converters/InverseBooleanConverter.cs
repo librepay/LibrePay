@@ -12,6 +12,7 @@ namespace BitcoinPOS_App.Converters
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
             => InvertBool(value, targetType);
 
+        // ReSharper disable once ParameterOnlyUsedForPreconditionCheck.Local
         private static object InvertBool(object value, Type targetType)
         {
             if (targetType != typeof(bool))
