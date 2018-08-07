@@ -2,8 +2,6 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Autofac;
-using Autofac.Core;
-using Autofac.Core.Activators.Reflection;
 using BitcoinPOS_App.Interfaces.Devices;
 using BitcoinPOS_App.Models;
 using BitcoinPOS_App.ViewModels;

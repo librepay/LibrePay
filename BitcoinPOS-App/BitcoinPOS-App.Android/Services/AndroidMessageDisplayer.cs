@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Android.Widget;
 using BitcoinPOS_App.Droid.Services;
-using BitcoinPOS_App.Interfaces;
 using BitcoinPOS_App.Interfaces.Devices;
 using Xamarin.Forms;
 using Application = Android.App.Application;

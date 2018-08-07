@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
 using Autofac;
-using BitcoinPOS_App.ViewModels;
 using BitcoinPOS_App.Views;
 using NBitcoin;
 using Xamarin.Forms;
