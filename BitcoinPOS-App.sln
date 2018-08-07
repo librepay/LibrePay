@@ -7,15 +7,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitcoinPOS-App.Android", "B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitcoinPOS-App.iOS", "BitcoinPOS-App\BitcoinPOS-App.iOS\BitcoinPOS-App.iOS.csproj", "{32CB2BC7-944F-415C-9DCD-1BCB5099EF32}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitcoinPOS-App", "BitcoinPOS-App\BitcoinPOS-App\BitcoinPOS-App.csproj", "{18852B06-4465-4EC4-918F-3669AFB9FA3D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BitcoinPOS-App", "BitcoinPOS-App\BitcoinPOS-App\BitcoinPOS-App.csproj", "{18852B06-4465-4EC4-918F-3669AFB9FA3D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{57C50FFC-9DF9-40AC-B553-4FBC8CD23B2A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{91A8F3B7-96C8-4B67-9636-D8EFB8541089}"
-ProjectSection(SolutionItems) = preProject
-	.gitignore = .gitignore
-	README.md = README.md
-EndProjectSection
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitcoinPOS-App.UnitTests", "tests\BitcoinPOS-App.UnitTests\BitcoinPOS-App.UnitTests.csproj", "{94DF101B-B18B-4597-A7C0-E7C978CBCEB0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -141,9 +143,36 @@ Global
 		{18852B06-4465-4EC4-918F-3669AFB9FA3D}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{18852B06-4465-4EC4-918F-3669AFB9FA3D}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 		{18852B06-4465-4EC4-918F-3669AFB9FA3D}.Release|iPhoneSimulator.Deploy.0 = Release|Any CPU
+		{94DF101B-B18B-4597-A7C0-E7C978CBCEB0}.Ad-Hoc|Any CPU.ActiveCfg = Debug|Any CPU
+		{94DF101B-B18B-4597-A7C0-E7C978CBCEB0}.Ad-Hoc|Any CPU.Build.0 = Debug|Any CPU
+		{94DF101B-B18B-4597-A7C0-E7C978CBCEB0}.Ad-Hoc|iPhone.ActiveCfg = Debug|Any CPU
+		{94DF101B-B18B-4597-A7C0-E7C978CBCEB0}.Ad-Hoc|iPhone.Build.0 = Debug|Any CPU
+		{94DF101B-B18B-4597-A7C0-E7C978CBCEB0}.Ad-Hoc|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{94DF101B-B18B-4597-A7C0-E7C978CBCEB0}.Ad-Hoc|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{94DF101B-B18B-4597-A7C0-E7C978CBCEB0}.AppStore|Any CPU.ActiveCfg = Debug|Any CPU
+		{94DF101B-B18B-4597-A7C0-E7C978CBCEB0}.AppStore|Any CPU.Build.0 = Debug|Any CPU
+		{94DF101B-B18B-4597-A7C0-E7C978CBCEB0}.AppStore|iPhone.ActiveCfg = Debug|Any CPU
+		{94DF101B-B18B-4597-A7C0-E7C978CBCEB0}.AppStore|iPhone.Build.0 = Debug|Any CPU
+		{94DF101B-B18B-4597-A7C0-E7C978CBCEB0}.AppStore|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{94DF101B-B18B-4597-A7C0-E7C978CBCEB0}.AppStore|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{94DF101B-B18B-4597-A7C0-E7C978CBCEB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94DF101B-B18B-4597-A7C0-E7C978CBCEB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94DF101B-B18B-4597-A7C0-E7C978CBCEB0}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{94DF101B-B18B-4597-A7C0-E7C978CBCEB0}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{94DF101B-B18B-4597-A7C0-E7C978CBCEB0}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{94DF101B-B18B-4597-A7C0-E7C978CBCEB0}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{94DF101B-B18B-4597-A7C0-E7C978CBCEB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94DF101B-B18B-4597-A7C0-E7C978CBCEB0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94DF101B-B18B-4597-A7C0-E7C978CBCEB0}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{94DF101B-B18B-4597-A7C0-E7C978CBCEB0}.Release|iPhone.Build.0 = Release|Any CPU
+		{94DF101B-B18B-4597-A7C0-E7C978CBCEB0}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{94DF101B-B18B-4597-A7C0-E7C978CBCEB0}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{94DF101B-B18B-4597-A7C0-E7C978CBCEB0} = {57C50FFC-9DF9-40AC-B553-4FBC8CD23B2A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {64511462-7D08-4360-AAF9-BF780813B2CC}
