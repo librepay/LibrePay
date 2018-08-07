@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -39,7 +40,16 @@ namespace BitcoinPOS_App.Providers
         public async Task<T> GetSecureValueAsync<T>(string key)
         {
             CheckKey(key);
-            var secureValue = await SecureStorage.GetAsync(key);
+            string secureValue;
+            try
+            {
+                secureValue = await SecureStorage.GetAsync(key);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("ERRO: Falha ao buscar config segura. {0}", e);
+                secureValue = null;
+            }
 
             if (string.IsNullOrWhiteSpace(secureValue))
                 return default;

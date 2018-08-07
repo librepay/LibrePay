@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using BitcoinPOS_App.Interfaces.Devices;
-using BitcoinPOS_App.Interfaces.Providers;
-using BitcoinPOS_App.Models;
 using BitcoinPOS_App.ViewModels;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -15,17 +12,40 @@ namespace BitcoinPOS_App.Views
     {
         private readonly PaymentFinalizationViewModel _viewModel;
         private readonly IMessageDisplayer _msgDisplayer;
-        private readonly INetworkInfoProvider _netInfoProvider;
-        private BackgroundJob _backgroundJob;
 
         public PaymentFinalizationPage(PaymentFinalizationViewModel viewModel)
         {
             InitializeComponent();
 
             _msgDisplayer = DependencyService.Get<IMessageDisplayer>();
-            _netInfoProvider = DependencyService.Get<INetworkInfoProvider>();
 
             BindingContext = _viewModel = viewModel;
+
+            MessagingCenter.Subscribe<PaymentFinalizationViewModel, decimal>(
+                _viewModel
+                , MessengerKeys.PaymentFullyReceived
+                , (_, value) =>
+                {
+                    Device.BeginInvokeOnMainThread(async () =>
+                    {
+                        await _msgDisplayer.ShowMessageAsync($"Pagamento efetuado!\nPago: {value:N8}");
+                        await ExitPageAsync();
+                    });
+                }
+            );
+            MessagingCenter.Subscribe<PaymentFinalizationViewModel, (decimal totalValue, decimal txValue)>(
+                _viewModel
+                , MessengerKeys.PaymentPartiallyReceived
+                , (_, partialPayment) =>
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                        _msgDisplayer.ShowMessageAsync(
+                            $"Valor recebido: {partialPayment.totalValue:N8}\n" +
+                            $"Aguardando o restante ({(_viewModel.Payment.ValueBitcoin - partialPayment.txValue):N8})..."
+                        )
+                    );
+                }
+            );
         }
 
         #region Overrides
@@ -34,16 +54,17 @@ namespace BitcoinPOS_App.Views
         {
             base.OnAppearing();
 
-            CopyAddressToClipboard();
+            _viewModel.CopyToClipboard(_viewModel.Payment.Address);
+            _msgDisplayer.ShowMessageAsync("Copiado endereço");
 
-            StartBackgroundJob();
+            _viewModel.StartBackgroundJob();
         }
 
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
 
-            StopBackgroundJob();
+            _viewModel.StopBackgroundJob();
         }
 
         protected override bool OnBackButtonPressed()
@@ -70,65 +91,19 @@ namespace BitcoinPOS_App.Views
 
         private async void LabelCopy_Clicked(object sender, EventArgs e)
         {
-            Clipboard.SetText(((Label) sender).Text);
+            _viewModel.CopyToClipboard(((Label) sender).Text);
             await _msgDisplayer.ShowMessageAsync("Copiado");
         }
 
         #endregion
 
-        #region Page Logic
-
-        private async Task AcceptPaymentAsync(decimal value)
+        public async Task ExitPageAsync()
         {
-            _viewModel.Payment.Done = true;
-
-            await _msgDisplayer.ShowMessageAsync($"Pagamento efetuado!\nPago: {value:N8}");
-            await ExitPageAsync();
-        }
-
-        private async Task ExitPageAsync()
-        {
-            StopBackgroundJob();
+            _viewModel.StopBackgroundJob();
 
             await Navigation.PopModalAsync();
 
-            MessagingCenter.Send(this, "clean");
+            MessagingCenter.Send(this, MessengerKeys.MainFinishPayment);
         }
-
-        private void CopyAddressToClipboard()
-        {
-            Clipboard.SetText(_viewModel.Payment.Address);
-            _msgDisplayer.ShowMessageAsync("Copiado endereço");
-        }
-
-        #endregion
-
-        #region BackgroundJob
-
-        private void StartBackgroundJob()
-        {
-            if (string.IsNullOrWhiteSpace(_viewModel.Payment.Address))
-                return;
-
-            StopBackgroundJob();
-
-            _backgroundJob = _netInfoProvider.WaitCompletePayment(
-                _viewModel.Payment
-                , value => Device.BeginInvokeOnMainThread(async () => await AcceptPaymentAsync(value))
-                , (totalValue, txValue) => Device.BeginInvokeOnMainThread(
-                    () => _msgDisplayer.ShowMessageAsync(
-                        $"Valor recebido: {totalValue:N8}\n" +
-                        $"Aguardando o restante ({(_viewModel.Payment.ValueBitcoin - totalValue):N8})..."
-                    )
-                )
-            );
-        }
-
-        private void StopBackgroundJob()
-        {
-            _backgroundJob?.Cancel();
-        }
-
-        #endregion
     }
 }

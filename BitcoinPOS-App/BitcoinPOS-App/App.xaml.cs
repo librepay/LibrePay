@@ -1,4 +1,6 @@
 using System;
+using System.Diagnostics;
+using BitcoinPOS_App.ViewModels;
 using BitcoinPOS_App.Views;
 using NBitcoin;
 using Xamarin.Forms;
@@ -8,7 +10,7 @@ using Xamarin.Forms.Xaml;
 
 namespace BitcoinPOS_App
 {
-    public partial class App : Application
+    public partial class App
     {
         public App()
         {
@@ -17,22 +19,22 @@ namespace BitcoinPOS_App
             // Adds entropy to the random utility used by NBitcoin
             RandomUtils.AddEntropy($"bitcoin-pos-app-{DateTime.Now.Ticks}-{Device.RuntimePlatform}");
 
-            MainPage = new NavigationPage(new MainPage());
+            MainPage = new NavigationPage(new MainPage(new MainPageViewModel()));
         }
 
         protected override void OnStart()
         {
-            // Handle when your app starts
+            Debug.WriteLine("Iniciando...", "APP");
         }
 
         protected override void OnSleep()
         {
-            // Handle when your app sleeps
+            Debug.WriteLine("Dormindo...", "APP");
         }
 
         protected override void OnResume()
         {
-            // Handle when your app resumes
+            Debug.WriteLine("Resumindo...", "APP");
         }
     }
 }

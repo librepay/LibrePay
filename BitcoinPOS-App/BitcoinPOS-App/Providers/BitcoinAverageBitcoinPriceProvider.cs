@@ -45,19 +45,22 @@ namespace BitcoinPOS_App.Providers
             var memoryCacheProvider = new MemoryCacheProvider(memoryCache);
 
             DefaultPolicy = Policy.WrapAsync(
-                Policy.CacheAsync<HttpResponseMessage>(
+                Policy.TimeoutAsync<HttpResponseMessage>(TimeSpan.FromSeconds(30))
+                , Policy.CacheAsync<HttpResponseMessage>(
                     memoryCacheProvider
                     , TimeSpan.FromMinutes(Constants.MinutesBetweenExchangePriceChecks)
                     , (context, key, ex) => Debugger.Break()
                 )
                 , policyBuilder.WaitAndRetryForeverAsync(
-                    sleepDurationProvider: i => TimeSpan.FromSeconds(1)
+                    sleepDurationProvider: i => TimeSpan.FromSeconds(3)
                     , onRetry: (r, _, i) => Debug.WriteLine(
                         "[INFO] Tentando novamente chamada em BitcoinAverage." +
                         $"\nErro anterior: {r.Exception}" +
                         $"\nResultado anterior: {r.Result?.StatusCode}"
                     )
                 )
+                , policyBuilder
+                    .CircuitBreakerAsync(1, TimeSpan.FromSeconds(5))
                 , Policy.BulkheadAsync<HttpResponseMessage>(1)
                 , Policy.TimeoutAsync<HttpResponseMessage>(() => TimeSpan.FromSeconds(15))
             ).WithPolicyKey("bitcoin-average");
