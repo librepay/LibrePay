@@ -21,5 +21,10 @@ namespace BitcoinPOS_App.UnitTests
         public const string TestnetBtcAddress = "2NGGJhXSwPu2THVaxh8txhxhZSxwshssAvJ";
 
         public static readonly Payment InvalidPaymentWoExchangeRate = new Payment(TestnetBtcAddress, 0.5M, null);
+
+        public const string ValidXPub =
+            "tpubDCiHcfHhKqUkdfbUKdTSHRFqqZvMmSJgbnPdvtkmWyDeeJY8FTBTwHfDFYnyxJaqYeHr85RbdmsWs7LqxQ29yr1RXZYnD6N5dGCLHyBip3h";
+
+        public const string ValidXPubAddressDerivedNum2 = "msHGChvTPyVchCW881Y9gr2NZDAFETLJFZ";
     }
 }

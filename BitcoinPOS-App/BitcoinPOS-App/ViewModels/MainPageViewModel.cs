@@ -119,7 +119,7 @@ namespace BitcoinPOS_App.ViewModels
 
             try
             {
-                var payment = await _paymentService.GenerateNewPayment(this)
+                var payment = await _paymentService.GenerateNewPayment(TransactionValue)
                     .ConfigureAwait(false);
                 Debug.WriteLine("Pagamento gerado: {0}", payment);
 

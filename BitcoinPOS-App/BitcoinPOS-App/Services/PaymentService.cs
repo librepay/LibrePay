@@ -4,7 +4,6 @@ using BitcoinPOS_App.Interfaces.Providers;
 using BitcoinPOS_App.Interfaces.Services;
 using BitcoinPOS_App.Models;
 using BitcoinPOS_App.Services;
-using BitcoinPOS_App.ViewModels;
 using NBitcoin;
 using Xamarin.Forms;
 
@@ -26,7 +25,7 @@ namespace BitcoinPOS_App.Services
             _btcPriceProvider = btcPriceProvider;
         }
 
-        public async Task<Payment> GeneratePaymentAddressAsync(Payment payment)
+        public virtual async Task<Payment> GeneratePaymentAddressAsync(Payment payment)
         {
             if (payment == null)
                 throw new ArgumentNullException(nameof(payment));
@@ -48,12 +47,12 @@ namespace BitcoinPOS_App.Services
             return payment;
         }
 
-        public async Task<Payment> GenerateNewPayment(MainPageViewModel viewModel)
+        public virtual async Task<Payment> GenerateNewPayment(decimal valueFiat)
         {
-            if (viewModel == null)
-                throw new ArgumentNullException(nameof(viewModel));
+            if (valueFiat <= 0)
+                throw new ArgumentException("Invalid value", nameof(valueFiat));
 
-            var payment = new Payment(viewModel);
+            var payment = new Payment(valueFiat);
 
             await GeneratePaymentAddressAsync(payment);
 

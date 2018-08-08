@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using BitcoinPOS_App.Models;
 using Xunit;
 
@@ -6,6 +7,8 @@ namespace BitcoinPOS_App.UnitTests.Models
     public class TransactionTests
     {
         [Fact]
+        [SuppressMessage("ReSharper", "EqualExpressionComparison")]
+        [SuppressMessage("ReSharper", "SuspiciousTypeConversion.Global")]
         public void TransactionChecksEquityById()
         {
             Assert.True(new Transaction("1").Equals(new Transaction("1")));

@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using BitcoinPOS_App.Models;
-using BitcoinPOS_App.ViewModels;
 
 namespace BitcoinPOS_App.Interfaces.Services
 {
@@ -17,7 +16,6 @@ namespace BitcoinPOS_App.Interfaces.Services
         /// <summary>
         /// Generates a new payment and fill all the needed properties
         /// </summary>
-        /// <exception cref="System.ArgumentNullException">when <paramref name="viewModel"/> is null</exception>
-        Task<Payment> GenerateNewPayment(MainPageViewModel viewModel);
+        Task<Payment> GenerateNewPayment(decimal valueFiat);
     }
 }

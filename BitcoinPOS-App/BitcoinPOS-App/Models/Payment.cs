@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using BitcoinPOS_App.ViewModels;
 
 namespace BitcoinPOS_App.Models
 {
@@ -45,9 +44,9 @@ namespace BitcoinPOS_App.Models
             ExchangeRate = exchangeRate;
         }
 
-        public Payment(MainPageViewModel viewModel)
+        public Payment(decimal valueFiat)
         {
-            ValueFiat = viewModel.TransactionValue;
+            ValueFiat = valueFiat;
         }
 
         public override string ToString()

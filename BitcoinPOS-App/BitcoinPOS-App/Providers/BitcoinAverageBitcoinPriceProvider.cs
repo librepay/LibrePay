@@ -69,11 +69,7 @@ namespace BitcoinPOS_App.Providers
         public async Task<ExchangeRate> GetLocalBitcoinPrice()
         {
             var response = await DefaultPolicy
-                .ExecuteAsync(_ =>
-                {
-                    Debug.WriteLine("[INFO] Buscando preço médio do dia no BitcoinAverage");
-                    return HttpClient.GetAsync("/indices/local/ticker/BTCBRL");
-                }, LocalPriceContext);
+                .ExecuteAsync(ExecuteRequest, LocalPriceContext);
 
             var rawBody = await response.Content.ReadAsStringAsync();
             var json = JObject.Parse(rawBody);
@@ -84,6 +80,12 @@ namespace BitcoinPOS_App.Providers
             Debug.WriteLine($"[INFO] Obteu valor de troca: {price}");
 
             return new ExchangeRate(price, date);
+        }
+
+        private Task<HttpResponseMessage> ExecuteRequest(Context _)
+        {
+            Debug.WriteLine("[INFO] Buscando preço médio do dia no BitcoinAverage");
+            return HttpClient.GetAsync("/indices/local/ticker/BTCBRL");
         }
     }
 }
