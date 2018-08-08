@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using BitcoinPOS_App.Interfaces.Providers;
 using BitcoinPOS_App.Models;
+using BitcoinPOS_App.ViewModels.Base;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 

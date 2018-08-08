@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using BitcoinPOS_App.Interfaces.Providers;
+using BitcoinPOS_App.ViewModels.Base;
 using Xamarin.Forms;
 
 namespace BitcoinPOS_App.ViewModels
