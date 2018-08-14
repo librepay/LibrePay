@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using BitcoinPOS_App.Interfaces.Providers;
 using BitcoinPOS_App.ViewModels.Base;
 using Xamarin.Forms;
@@ -32,15 +33,19 @@ namespace BitcoinPOS_App.ViewModels
             await _settingsProvider.GetSecureValueAsync<string>(Constants.SettingsXPubKey)
                 .ContinueWith(t =>
                 {
-                    if (!t.IsFaulted)
+                    if (t.IsCanceled || t.IsFaulted)
                     {
-                        IsLoaded = true;
-                        ExtendedPublicKey = t.Result;
+                        MessagingCenter.Send<SettingsViewModel, Exception>(
+                            this
+                            , MessengerKeys.SettingsFailedLoadSettings
+                            , t.Exception
+                        );
 
                         return Task.CompletedTask;
                     }
 
-                    MessagingCenter.Send(this, MessengerKeys.SettingsFailedLoadSettings, t.Exception);
+                    IsLoaded = true;
+                    ExtendedPublicKey = t.Result;
 
                     return Task.CompletedTask;
                 })
