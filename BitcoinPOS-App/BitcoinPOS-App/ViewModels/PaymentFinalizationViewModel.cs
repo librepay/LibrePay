@@ -24,20 +24,22 @@ namespace BitcoinPOS_App.ViewModels
             _netInfoProvider = netInfoProvider;
         }
 
-        public void AcceptPayment(decimal value)
+        public virtual void AcceptPayment(decimal value)
         {
             Payment.Done = true;
 
-            MessagingCenter.Send(this, MessengerKeys.PaymentFullyReceived, value);
+            Device.BeginInvokeOnMainThread(() =>
+                MessagingCenter.Send(this, MessengerKeys.PaymentFullyReceived, value)
+            );
         }
 
-        public void CopyToClipboard(string value)
+        public virtual void CopyToClipboard(string value)
         {
             Debug.WriteLine("Copiando valor: {0}", (object) value);
             Clipboard.SetText(value);
         }
 
-        public void StartBackgroundJob()
+        public virtual void StartBackgroundJob()
         {
             if (string.IsNullOrWhiteSpace(Payment.Address))
                 return;
@@ -47,20 +49,22 @@ namespace BitcoinPOS_App.ViewModels
             _backgroundJob = _netInfoProvider.WaitCompletePayment(
                 Payment
                 , AcceptPayment
-                , (totalValue, txValue) => MessagingCenter.Send(
-                    this
-                    , MessengerKeys.PaymentPartiallyReceived
-                    , (totalValue, txValue)
-                )
-            );
+                , (totalValue, txValue) =>
+                {
+                    Device.BeginInvokeOnMainThread(() => MessagingCenter.Send(
+                        this
+                        , MessengerKeys.PaymentPartiallyReceived
+                        , (totalValue, txValue)
+                    ));
+                });
         }
 
-        public void StopBackgroundJob()
+        public virtual void StopBackgroundJob()
         {
             _backgroundJob?.Cancel();
         }
 
-        public void NotifyMainPageOfPaymentFinalization()
+        public virtual void NotifyMainPageOfPaymentFinalization()
         {
             MessagingCenter.Send(this, MessengerKeys.MainFinishPayment);
         }
