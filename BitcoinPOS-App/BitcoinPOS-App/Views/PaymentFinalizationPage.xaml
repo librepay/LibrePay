@@ -17,7 +17,7 @@
             </Label>
 
             <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-                <Label Style="{StaticResource SubHeaderText}" Text="{Binding Payment.ValueBitcoin, Mode=OneWay}"
+                <Label Style="{StaticResource SubHeaderText}" Text="{Binding MissingAmount, Mode=OneWay}"
                        HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Tapped="LabelCopy_Clicked" />

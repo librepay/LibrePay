@@ -28,6 +28,8 @@ namespace BitcoinPOS_App.Views
                 {
                     Device.BeginInvokeOnMainThread(async () =>
                     {
+                        _viewModel.HandleCompletePayment(value);
+
                         await _msgDisplayer.ShowMessageAsync($"Pagamento efetuado!\nPago: {value:N8}");
                         await ExitPageAsync();
                     });
@@ -38,12 +40,15 @@ namespace BitcoinPOS_App.Views
                 , MessengerKeys.PaymentPartiallyReceived
                 , (_, partialPayment) =>
                 {
-                    Device.BeginInvokeOnMainThread(() =>
-                        _msgDisplayer.ShowMessageAsync(
+                    Device.BeginInvokeOnMainThread(async () =>
+                    {
+                        _viewModel.HandlePartialValuePayment(partialPayment);
+
+                        await _msgDisplayer.ShowMessageAsync(
                             $"Valor recebido: {partialPayment.totalValue:N8}\n" +
-                            $"Aguardando o restante ({(_viewModel.Payment.ValueBitcoin - partialPayment.txValue):N8})..."
-                        )
-                    );
+                            $"Aguardando o restante ({_viewModel.MissingAmount:N8})..."
+                        );
+                    });
                 }
             );
         }
@@ -91,7 +96,7 @@ namespace BitcoinPOS_App.Views
 
         private async void LabelCopy_Clicked(object sender, EventArgs e)
         {
-            _viewModel.CopyToClipboard(((Label) sender).Text);
+            _viewModel.CopyToClipboard(((Label)sender).Text);
             await _msgDisplayer.ShowMessageAsync("Copiado");
         }
 
