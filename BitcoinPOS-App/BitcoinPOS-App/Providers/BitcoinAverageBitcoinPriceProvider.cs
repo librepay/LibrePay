@@ -79,7 +79,7 @@ namespace BitcoinPOS_App.Providers
 
             Debug.WriteLine($"[INFO] Obteu valor de troca: {price}");
 
-            return new ExchangeRate(price, date);
+            return new ExchangeRate(price, "R$/BTC", date);
         }
 
         private Task<HttpResponseMessage> ExecuteRequest(Context _)
