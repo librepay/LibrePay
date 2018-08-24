@@ -42,13 +42,13 @@
                 <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
                     <Button
                         IsEnabled="{Binding IsBusy, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}"
-                        AutomationId="3" Text="3" Command="{Binding PinpadNumberCommand}" CommandParameter="3" />
+                        AutomationId="1" Text="1" Command="{Binding PinpadNumberCommand}" CommandParameter="1" />
                     <Button
                         IsEnabled="{Binding IsBusy, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}"
                         AutomationId="2" Text="2" Command="{Binding PinpadNumberCommand}" CommandParameter="2" />
                     <Button
                         IsEnabled="{Binding IsBusy, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}"
-                        AutomationId="1" Text="1" Command="{Binding PinpadNumberCommand}" CommandParameter="1" />
+                        AutomationId="3" Text="3" Command="{Binding PinpadNumberCommand}" CommandParameter="3" />
                 </StackLayout>
                 <StackLayout Padding="13" Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
                     <Button
