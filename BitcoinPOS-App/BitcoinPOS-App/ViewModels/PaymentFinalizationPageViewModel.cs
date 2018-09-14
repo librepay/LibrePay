@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using BitcoinPOS_App.Interfaces.Providers;
 using BitcoinPOS_App.Models;
 using BitcoinPOS_App.ViewModels.Base;
@@ -8,7 +9,7 @@ using Xamarin.Forms;
 
 namespace BitcoinPOS_App.ViewModels
 {
-    public class PaymentFinalizationViewModel : BaseViewModel
+    public class PaymentFinalizationPageViewModel : BaseViewModel
     {
         private Payment _payment = new Payment();
         private decimal _missingAmount;
@@ -27,10 +28,17 @@ namespace BitcoinPOS_App.ViewModels
             set => SetProperty(ref _missingAmount, value);
         }
 
-        public PaymentFinalizationViewModel(INetworkInfoProvider netInfoProvider)
+        public PaymentFinalizationPageViewModel(INetworkInfoProvider netInfoProvider)
         {
             _netInfoProvider = netInfoProvider;
             PropertyChanged += PaymentFinalizationViewModel_PropertyChanged;
+        }
+
+        public override Task InitializeAsync(object[] navigationData)
+        {
+            Payment = (Payment)navigationData[0];
+
+            return base.InitializeAsync(navigationData);
         }
 
         private void PaymentFinalizationViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -45,7 +53,7 @@ namespace BitcoinPOS_App.ViewModels
         {
             Payment.Done = true;
 
-            Device.BeginInvokeOnMainThread(() =>
+            RunOnMainThread(() =>
                 MessagingCenter.Send(this, MessengerKeys.PaymentFullyReceived, value)
             );
         }
@@ -68,7 +76,7 @@ namespace BitcoinPOS_App.ViewModels
                 , AcceptPayment
                 , (totalValue, txValue) =>
                 {
-                    Device.BeginInvokeOnMainThread(() => MessagingCenter.Send(
+                    RunOnMainThread(() => MessagingCenter.Send(
                         this
                         , MessengerKeys.PaymentPartiallyReceived
                         , (totalValue, txValue)

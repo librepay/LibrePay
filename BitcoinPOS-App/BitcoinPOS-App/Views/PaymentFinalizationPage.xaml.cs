@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using BitcoinPOS_App.Interfaces.Devices;
+using BitcoinPOS_App.Interfaces.Services.Navigation;
 using BitcoinPOS_App.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -10,18 +11,24 @@ namespace BitcoinPOS_App.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class PaymentFinalizationPage
     {
-        private readonly PaymentFinalizationViewModel _viewModel;
+        private readonly PaymentFinalizationPageViewModel _viewModel;
+        private readonly INavigationService _navigationService;
         private readonly IMessageDisplayer _msgDisplayer;
 
-        public PaymentFinalizationPage(PaymentFinalizationViewModel viewModel, IMessageDisplayer msgDisplayer)
+        public PaymentFinalizationPage(
+            PaymentFinalizationPageViewModel viewModel
+            , INavigationService navigationService
+            , IMessageDisplayer msgDisplayer
+        )
         {
             InitializeComponent();
 
+            _navigationService = navigationService;
             _msgDisplayer = msgDisplayer;
 
             BindingContext = _viewModel = viewModel;
 
-            MessagingCenter.Subscribe<PaymentFinalizationViewModel, decimal>(
+            MessagingCenter.Subscribe<PaymentFinalizationPageViewModel, decimal>(
                 _viewModel
                 , MessengerKeys.PaymentFullyReceived
                 , (_, value) =>
@@ -35,7 +42,7 @@ namespace BitcoinPOS_App.Views
                     });
                 }
             );
-            MessagingCenter.Subscribe<PaymentFinalizationViewModel, (decimal totalValue, decimal txValue)>(
+            MessagingCenter.Subscribe<PaymentFinalizationPageViewModel, (decimal totalValue, decimal txValue)>(
                 _viewModel
                 , MessengerKeys.PaymentPartiallyReceived
                 , (_, partialPayment) =>
@@ -96,7 +103,7 @@ namespace BitcoinPOS_App.Views
 
         private async void LabelCopy_Clicked(object sender, EventArgs e)
         {
-            _viewModel.CopyToClipboard(((Label)sender).Text);
+            _viewModel.CopyToClipboard(((Label) sender).Text);
             await _msgDisplayer.ShowMessageAsync("Copiado");
         }
 
@@ -106,7 +113,7 @@ namespace BitcoinPOS_App.Views
         {
             _viewModel.StopBackgroundJob();
 
-            await Navigation.PopModalAsync();
+            await _navigationService.PopModalStackAsync();
 
             _viewModel.NotifyMainPageOfPaymentFinalization();
         }

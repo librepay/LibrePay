@@ -1,8 +1,11 @@
 using System;
 using System.Diagnostics;
 using Autofac;
-using BitcoinPOS_App.Views;
+using BitcoinPOS_App.Interfaces.Services.Navigation;
+using BitcoinPOS_App.ViewModels;
 using NBitcoin;
+using Plugin.Iconize;
+using Plugin.Iconize.Fonts;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -22,9 +25,10 @@ namespace BitcoinPOS_App
             // Adds entropy to the random utility used by NBitcoin
             RandomUtils.AddEntropy($"bitcoin-pos-app-{DateTime.Now.Ticks}-{Device.RuntimePlatform}");
 
-            MainPage = new NavigationPage(
-                Container.Resolve<MainPage>()
-            );
+            Iconize.With(new MaterialModule());
+
+            Container.Resolve<INavigationService>()
+                .InitializeAsync<MainPageViewModel>();
         }
 
         private void CreateDIContainer(Action<ContainerBuilder> configDI)

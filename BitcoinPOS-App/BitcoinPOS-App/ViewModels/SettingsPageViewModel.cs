@@ -6,7 +6,7 @@ using Xamarin.Forms;
 
 namespace BitcoinPOS_App.ViewModels
 {
-    public class SettingsViewModel : BaseViewModel
+    public class SettingsPageViewModel : BaseViewModel
     {
         private readonly ISettingsProvider _settingsProvider;
 
@@ -20,7 +20,7 @@ namespace BitcoinPOS_App.ViewModels
             set => SetProperty(ref _extendedPublicKey, value);
         }
 
-        public SettingsViewModel(ISettingsProvider settingsProvider)
+        public SettingsPageViewModel(ISettingsProvider settingsProvider)
         {
             _settingsProvider = settingsProvider;
         }
@@ -35,7 +35,7 @@ namespace BitcoinPOS_App.ViewModels
                 {
                     if (t.IsCanceled || t.IsFaulted)
                     {
-                        MessagingCenter.Send<SettingsViewModel, Exception>(
+                        MessagingCenter.Send<SettingsPageViewModel, Exception>(
                             this
                             , MessengerKeys.SettingsFailedLoadSettings
                             , t.Exception

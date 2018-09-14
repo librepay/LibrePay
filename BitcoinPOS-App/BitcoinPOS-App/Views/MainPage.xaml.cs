@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
-using Autofac;
 using BitcoinPOS_App.Interfaces.Devices;
+using BitcoinPOS_App.Interfaces.Services.Navigation;
 using BitcoinPOS_App.Models;
 using BitcoinPOS_App.ViewModels;
 using Xamarin.Forms;
@@ -14,14 +15,20 @@ namespace BitcoinPOS_App.Views
     public partial class MainPage
     {
         private readonly MainPageViewModel _viewModel;
+        private readonly INavigationService _navigationService;
         private readonly IMessageDisplayer _msgDisplayer;
 
-        public MainPage(MainPageViewModel viewModel, IMessageDisplayer msgDisplayer)
+        public MainPage(
+            MainPageViewModel viewModel
+            , INavigationService navigationService
+            , IMessageDisplayer msgDisplayer
+        )
         {
             InitializeComponent();
 
             BindingContext = _viewModel = viewModel;
 
+            _navigationService = navigationService;
             _msgDisplayer = msgDisplayer;
 
             MessagingCenter.Subscribe<MainPageViewModel, bool>(
@@ -53,7 +60,7 @@ namespace BitcoinPOS_App.Views
 
         private async Task OpenSettingsPageAsync()
         {
-            await Navigation.PushAsync(App.Container.Resolve<SettingsPage>());
+            await _navigationService.NavigateToAsync<SettingsPageViewModel>();
         }
 
         protected override void OnAppearing()
@@ -86,24 +93,98 @@ namespace BitcoinPOS_App.Views
 
             if (payment != null)
             {
-                using (var scope = App.Container.BeginLifetimeScope())
-                {
-                    var vm = scope.Resolve<PaymentFinalizationViewModel>();
-                    vm.Payment = payment;
-
-                    await Navigation.PushModalAsync(
-                        scope.Resolve<PaymentFinalizationPage>(
-                            new TypedParameter(typeof(PaymentFinalizationViewModel), vm)
-                        )
-                    );
-                }
+                await _navigationService.NavigateToModalAsync<PaymentFinalizationPageViewModel>(payment);
             }
         }
 
         private void Clean_Clicked(object sender, EventArgs e)
         {
             Debug.WriteLine("Limpar pressionado", "UI");
+            _viewModel.BackspacePress();
+        }
+
+        private void Clean_OnLongPressed(object sender, EventArgs e)
+        {
+            Debug.WriteLine("Limpar segurado", "UI");
             _viewModel.ResetPinpad();
+        }
+
+        private static bool _amountSwitchAnimationLock;
+
+        private async void AmountSwitchTapped(object sender, EventArgs e)
+        {
+            if (_amountSwitchAnimationLock)
+                return;
+
+            _amountSwitchAnimationLock = true;
+
+            var upOrDown = _viewModel.SwitchEnteringSymbol();
+
+            await Task.Yield();
+
+            var grid = (Grid)sender;
+            var labelPrevious = (Label)grid.Children.Last();
+            var labelNext = (Label)grid.Children.First();
+
+            const string switchValueEntryAnimationName = "switchValueEntry";
+            this.AbortAnimation(switchValueEntryAnimationName);
+
+            const int translateYCoefficient = 30;
+            int translateYStart = upOrDown ? -translateYCoefficient : -translateYCoefficient / 4,
+                translateYEnd = upOrDown ? -translateYCoefficient / 4 : -translateYCoefficient;
+
+            var defaultEasing = Easing.SpringOut;
+            var fullAnimation = new Animation()
+                    // font size
+                    .WithConcurrent(new Animation(
+                        d => labelNext.FontSize = d
+                        , labelNext.FontSize
+                        , labelPrevious.FontSize
+                        , defaultEasing
+                    ))
+                    .WithConcurrent(new Animation(
+                        d => labelPrevious.FontSize = d
+                        , labelPrevious.FontSize
+                        , labelNext.FontSize
+                        , defaultEasing
+                    ))
+
+                    // translate y
+                    .WithConcurrent(new Animation(
+                        d => labelNext.TranslationY = d
+                        , translateYStart
+                        , upOrDown ? translateYEnd + translateYCoefficient / 4 : translateYEnd
+                        , upOrDown ? Easing.BounceOut : Easing.CubicOut
+                    ))
+                    .WithConcurrent(new Animation(
+                        d => labelPrevious.TranslationY = d
+                        , translateYStart
+                        , upOrDown ? translateYEnd : translateYEnd + -translateYCoefficient / 4
+                        , upOrDown ? Easing.CubicOut : Easing.BounceOut
+                    ))
+
+                    // font color
+                    .WithConcurrent(
+                        labelNext.ColorTo(
+                            labelNext.TextColor
+                            , labelPrevious.TextColor
+                            , c => labelNext.TextColor = c
+                            , defaultEasing
+                        )
+                    )
+                    .WithConcurrent(
+                        labelPrevious.ColorTo(
+                            labelPrevious.TextColor
+                            , labelNext.TextColor
+                            , c => labelPrevious.TextColor = c
+                            , defaultEasing
+                        )
+                    )
+                ;
+
+            await this.RunAnimationAsync(switchValueEntryAnimationName, fullAnimation, length: 500);
+
+            _amountSwitchAnimationLock = false;
         }
     }
 }

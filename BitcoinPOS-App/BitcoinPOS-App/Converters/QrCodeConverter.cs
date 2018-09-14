@@ -23,7 +23,7 @@ namespace BitcoinPOS_App.Converters
             var payment = (Payment) value;
 
             if (string.IsNullOrWhiteSpace(payment.Address) || payment.ValueBitcoin <= 0)
-                throw new ArgumentException("Invalid payment", nameof(value));
+                return null;
 
             var generator = new PayloadGenerator.BitcoinAddress(
                 payment.Address

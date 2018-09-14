@@ -7,8 +7,9 @@ using Xamarin.Forms.Platform.Android;
 
 namespace BitcoinPOS_App.Droid
 {
-    [Activity(Label = "BitcoinPOS_App", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true,
-        ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "Bitcoin POS", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true,
+        ConfigurationChanges = ConfigChanges.ScreenSize,
+        ScreenOrientation = ScreenOrientation.Portrait)]
     public class MainActivity : FormsAppCompatActivity
     {
         protected override void OnCreate(Bundle bundle)
@@ -19,6 +20,7 @@ namespace BitcoinPOS_App.Droid
             base.OnCreate(bundle);
 
             Forms.Init(this, bundle);
+            Plugin.Iconize.Iconize.Init(Resource.Id.toolbar, Resource.Id.sliding_tabs);
             LoadApplication(new App(ConfigDI));
         }
 

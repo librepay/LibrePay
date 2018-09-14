@@ -40,12 +40,9 @@ namespace BitcoinPOS_App.UnitTests.Converters
             ex = Assert.Throws<ArgumentException>(() => qcc.Convert("", typeof(ImageSource), null, null));
             Assert.StartsWith("Invalid value type", ex.Message);
 
-            ex = Assert.Throws<ArgumentException>(() =>
-                qcc.Convert(FakeData.InvalidPaymentWoAddress, typeof(ImageSource), null, null));
-            Assert.StartsWith("Invalid payment", ex.Message);
-            ex = Assert.Throws<ArgumentException>(() =>
-                qcc.Convert(FakeData.InvalidPaymentWoExchangeRate, typeof(ImageSource), null, null));
-            Assert.StartsWith("Invalid payment", ex.Message);
+            Assert.Null(qcc.Convert(FakeData.InvalidPaymentWoAddress, typeof(ImageSource), null, null));
+
+            Assert.Null(qcc.Convert(FakeData.InvalidPaymentWoExchangeRate, typeof(ImageSource), null, null));
         }
 
         [Fact]

@@ -27,7 +27,7 @@ namespace BitcoinPOS_App.Models
             }
         }
 
-        public decimal ValueBitcoin => ExchangeRate?.GetExchangedValue(ValueFiat) ?? 0M;
+        public decimal ValueBitcoin => ExchangeRate?.ExchangeValueTo(ValueFiat) ?? 0M;
 
         public ExchangeRate ExchangeRate { get; set; }
 

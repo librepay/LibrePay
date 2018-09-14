@@ -10,12 +10,12 @@ namespace BitcoinPOS_App.UnitTests.ViewModels
 {
     public class SettingsViewModelTests
     {
-        private static SettingsViewModel Get(
+        private static SettingsPageViewModel Get(
             out Mock<ISettingsProvider> mockSettings
         )
         {
             mockSettings = new Mock<ISettingsProvider>(MockBehavior.Strict);
-            return new SettingsViewModel(
+            return new SettingsPageViewModel(
                 mockSettings.Object
             );
         }
@@ -46,7 +46,7 @@ namespace BitcoinPOS_App.UnitTests.ViewModels
 
             var messageReceived = false;
 
-            MessagingCenter.Subscribe<SettingsViewModel, Exception>(
+            MessagingCenter.Subscribe<SettingsPageViewModel, Exception>(
                 this
                 , MessengerKeys.SettingsFailedLoadSettings
                 , (_, arg) =>

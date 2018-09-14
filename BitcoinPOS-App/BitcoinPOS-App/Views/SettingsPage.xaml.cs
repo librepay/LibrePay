@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using BitcoinPOS_App.Interfaces.Devices;
+using BitcoinPOS_App.Interfaces.Services.Navigation;
 using BitcoinPOS_App.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -10,18 +11,24 @@ namespace BitcoinPOS_App.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SettingsPage
     {
-        private readonly SettingsViewModel _viewModel;
+        private readonly SettingsPageViewModel _viewModel;
+        private readonly INavigationService _navigationService;
         private readonly IMessageDisplayer _messageDisplayer;
 
-        public SettingsPage(SettingsViewModel viewModel, IMessageDisplayer messageDisplayer)
+        public SettingsPage(
+            SettingsPageViewModel viewModel
+            , INavigationService navigationService
+            , IMessageDisplayer messageDisplayer
+        )
         {
             InitializeComponent();
 
+            _navigationService = navigationService;
             _messageDisplayer = messageDisplayer;
 
             BindingContext = _viewModel = viewModel;
 
-            MessagingCenter.Subscribe<SettingsViewModel, Exception>(_viewModel
+            MessagingCenter.Subscribe<SettingsPageViewModel, Exception>(_viewModel
                 , MessengerKeys.SettingsFailedLoadSettings
                 , (_, ex) =>
                 {
@@ -30,7 +37,7 @@ namespace BitcoinPOS_App.Views
                     Device.BeginInvokeOnMainThread(async () =>
                     {
                         // needs to be at root to show alerts
-                        await Navigation.PopToRootAsync();
+                        await _navigationService.ClearStack();
                         await DisplayAlert("Erro", "Erro ao carregar configuração", "Cancelar");
                     });
                 }
@@ -52,8 +59,8 @@ namespace BitcoinPOS_App.Views
         {
             await _viewModel.SaveSettingsAsync();
 
-            // go back to the main page
-            await Navigation.PopAsync();
+            // go back in the navigation stack
+            await _navigationService.PopStackAsync();
             await _messageDisplayer.ShowMessageAsync("Configurações salvas!");
         }
     }

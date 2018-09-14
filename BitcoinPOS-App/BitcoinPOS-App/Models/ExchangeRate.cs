@@ -6,27 +6,17 @@ namespace BitcoinPOS_App.Models
     {
         public decimal Rate { get; set; }
 
-        public ExchangeSymbol Symbol { get; set; } = new ExchangeSymbol("R$/BTC");
+        public ExchangeSymbol Symbol { get; set; }
 
         public string DisplayRate => $"{Symbol} {Rate:N2}";
 
         public DateTime Date { get; set; }
 
-        public decimal GetExchangedValue(decimal valueFiat)
-            => Math.Round(valueFiat / Rate, Constants.BitcoinDecimals, MidpointRounding.AwayFromZero);
+        public decimal ExchangeValueTo(decimal valueFrom, int decimals = Constants.BitcoinDecimals)
+            => Math.Round(valueFrom / Rate, decimals, MidpointRounding.AwayFromZero);
 
-        [Obsolete("Specify exchange pair symbols", error: false)]
-        public ExchangeRate()
-        {
-            Date = DateTime.Now;
-        }
-
-        [Obsolete("Specify exchange pair symbols", error: false)]
-        public ExchangeRate(decimal rate, DateTime date)
-        {
-            Rate = rate;
-            Date = date;
-        }
+        public decimal ExchangeValueFrom(decimal valueTo, int decimals = Constants.FiatDecimals)
+            => Math.Round(valueTo * Rate, decimals, MidpointRounding.AwayFromZero);
 
         public ExchangeRate(decimal rate, string fromToSymbol, DateTime date)
         {

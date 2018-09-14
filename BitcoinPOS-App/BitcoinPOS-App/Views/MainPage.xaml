@@ -3,72 +3,115 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BitcoinPOS_App.Views.MainPage"
-             Title="Bitcoin POS">
+             xmlns:behaviors="clr-namespace:BitcoinPOS_App.Behaviors;assembly=BitcoinPOS_App"
+             xmlns:iconize="clr-namespace:Plugin.Iconize;assembly=Plugin.Iconize"
+             Title="Bitcoin POS" Padding="10, 25">
     <ContentPage.ToolbarItems>
-        <ToolbarItem
-            IsEnabled="{Binding IsBusy, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}"
-            AutomationId="toolbarbtn_settings" Text="Opções" Clicked="Settings_Clicked" />
+        <iconize:IconToolbarItem AutomationId="settings" Icon="md-settings" Clicked="Settings_Clicked" IconColor="White" />
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <StackLayout Margin="10" HorizontalOptions="CenterAndExpand" VerticalOptions="StartAndExpand">
-            <Label Text="{Binding BitcoinPrice.DisplayRate, Mode=OneWay}"
-                   Style="{StaticResource HeaderText}" HorizontalTextAlignment="End"
-                   HorizontalOptions="EndAndExpand" VerticalOptions="CenterAndExpand" />
-            <Editor IsEnabled="False" Text="{Binding TransactionValue, Mode=OneWay, StringFormat='{0:C}'}"
-                    HeightRequest="125" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand" />
-            <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                    <Button
-                        IsEnabled="{Binding IsBusy, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}"
-                        AutomationId="7" Text="7" Command="{Binding PinpadNumberCommand}" CommandParameter="7" />
-                    <Button
-                        IsEnabled="{Binding IsBusy, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}"
-                        AutomationId="8" Text="8" Command="{Binding PinpadNumberCommand}" CommandParameter="8" />
-                    <Button
-                        IsEnabled="{Binding IsBusy, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}"
-                        AutomationId="9" Text="9" Command="{Binding PinpadNumberCommand}" CommandParameter="9" />
-                </StackLayout>
-                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                    <Button
-                        IsEnabled="{Binding IsBusy, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}"
-                        AutomationId="4" Text="4" Command="{Binding PinpadNumberCommand}" CommandParameter="4" />
-                    <Button
-                        IsEnabled="{Binding IsBusy, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}"
-                        AutomationId="5" Text="5" Command="{Binding PinpadNumberCommand}" CommandParameter="5" />
-                    <Button
-                        IsEnabled="{Binding IsBusy, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}"
-                        AutomationId="6" Text="6" Command="{Binding PinpadNumberCommand}" CommandParameter="6" />
-                </StackLayout>
-                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                    <Button
+        <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <Label Text="{Binding ExchangeRate.DisplayRate, Mode=OneWay}"
+                   Style="{StaticResource HeaderText}" HorizontalTextAlignment="Center"
+                   VerticalTextAlignment="Center"
+                   HorizontalOptions="CenterAndExpand" VerticalOptions="Start" />
+            <Grid HorizontalOptions="FillAndExpand" VerticalOptions="Start" RowSpacing="0" ColumnSpacing="0"
+                  HeightRequest="80" BackgroundColor="{StaticResource PrimaryColor}" Padding="0">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="AmountSwitchTapped" />
+                </Grid.GestureRecognizers>
+
+                <Label Grid.Row="0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
+                       TextColor="WhiteSmoke" FontSize="10" HeightRequest="60" MinimumHeightRequest="60" Margin="0"
+                       VerticalTextAlignment="End" HorizontalTextAlignment="Center"
+                       FontAttributes="Bold" TranslationY="-30">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="">
+                                <Span.FontFamily>
+                                    <OnPlatform x:TypeArguments="x:String">
+                                        <!-- <On Platform="iOS" Value="CryptoFont" /> -->
+                                        <On Platform="Android" Value="Fonts/cryptofont-webfont.ttf#CryptoFont" />
+                                        <!-- <On Platform="UWP" Value="Assets/Fonts/cryptofont-webfont.ttf#CryptoFont" /> -->
+                                    </OnPlatform>
+                                </Span.FontFamily>
+                            </Span>
+                            <Span Text="{Binding Path=TransactionValueCrypto.Value, Mode=OneWay}" />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <Label Grid.Row="1" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
+                       Text="{Binding Path=TransactionValue.ValueDecimal, Mode=OneWay, StringFormat='{0:C}'}"
+                       TextColor="Black" FontSize="36" HeightRequest="60" MinimumHeightRequest="60" Margin="0"
+                       VerticalTextAlignment="Start" HorizontalTextAlignment="Center"
+                       FontAttributes="Bold" TranslationY="-37" />
+            </Grid>
+            <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button Style="{StaticResource ButtonPinpad}" Grid.Row="0" Grid.Column="0"
                         IsEnabled="{Binding IsBusy, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}"
                         AutomationId="1" Text="1" Command="{Binding PinpadNumberCommand}" CommandParameter="1" />
-                    <Button
+                <Button Style="{StaticResource ButtonPinpad}" Grid.Row="0" Grid.Column="1"
                         IsEnabled="{Binding IsBusy, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}"
                         AutomationId="2" Text="2" Command="{Binding PinpadNumberCommand}" CommandParameter="2" />
-                    <Button
+                <Button Style="{StaticResource ButtonPinpad}" Grid.Row="0" Grid.Column="2"
                         IsEnabled="{Binding IsBusy, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}"
                         AutomationId="3" Text="3" Command="{Binding PinpadNumberCommand}" CommandParameter="3" />
-                </StackLayout>
-                <StackLayout Padding="13" Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
-                    <Button
+
+                <Button Style="{StaticResource ButtonPinpad}" Grid.Row="1" Grid.Column="0"
                         IsEnabled="{Binding IsBusy, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}"
-                        AutomationId="virgula" Text="," Command="{Binding PinpadNumberCommand}" CommandParameter="," />
-                    <Button
+                        AutomationId="4" Text="4" Command="{Binding PinpadNumberCommand}" CommandParameter="4" />
+                <Button Style="{StaticResource ButtonPinpad}" Grid.Row="1" Grid.Column="1"
+                        IsEnabled="{Binding IsBusy, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}"
+                        AutomationId="5" Text="5" Command="{Binding PinpadNumberCommand}" CommandParameter="5" />
+                <Button Style="{StaticResource ButtonPinpad}" Grid.Row="1" Grid.Column="2"
+                        IsEnabled="{Binding IsBusy, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}"
+                        AutomationId="6" Text="6" Command="{Binding PinpadNumberCommand}" CommandParameter="6" />
+
+                <Button Style="{StaticResource ButtonPinpad}" Grid.Row="2" Grid.Column="0"
+                        IsEnabled="{Binding IsBusy, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}"
+                        AutomationId="7" Text="7" Command="{Binding PinpadNumberCommand}" CommandParameter="7" />
+                <Button Style="{StaticResource ButtonPinpad}" Grid.Row="2" Grid.Column="1"
+                        IsEnabled="{Binding IsBusy, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}"
+                        AutomationId="8" Text="8" Command="{Binding PinpadNumberCommand}" CommandParameter="8" />
+                <Button Style="{StaticResource ButtonPinpad}" Grid.Row="2" Grid.Column="2"
+                        IsEnabled="{Binding IsBusy, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}"
+                        AutomationId="9" Text="9" Command="{Binding PinpadNumberCommand}" CommandParameter="9" />
+
+                <iconize:IconButton Grid.Row="3" Grid.Column="0"
+                        Style="{StaticResource ButtonPrimaryPinpad}" AutomationId="backspace" Text="md-backspace" FontSize="Large"
+                        Clicked="Clean_Clicked">
+                    <Button.Behaviors>
+                        <behaviors:LongPressBehavior DurationInMs="500" LongPressed="Clean_OnLongPressed" />
+                    </Button.Behaviors>
+                </iconize:IconButton>
+                <Button Style="{StaticResource ButtonPinpad}" Grid.Row="3" Grid.Column="1"
                         IsEnabled="{Binding IsBusy, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}"
                         AutomationId="0" Text="0" Command="{Binding PinpadNumberCommand}" CommandParameter="0" />
-                </StackLayout>
-                <StackLayout Padding="13" Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
-                    <Button
+                <iconize:IconButton Grid.Row="3" Grid.Column="2"
                         IsEnabled="{Binding IsBusy, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}"
-                        Style="{StaticResource ButtonPrimary}" AutomationId="clean" Text="Limpar"
-                        Clicked="Clean_Clicked" />
-                    <Button
-                        IsEnabled="{Binding IsBusy, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}"
-                        Style="{StaticResource ButtonPrimary}" AutomationId="ok"
-                        Text="Receber" Clicked="Receive_Clicked" />
-                </StackLayout>
-            </StackLayout>
+                        Style="{StaticResource ButtonPrimaryPinpad}" AutomationId="enter"
+                        Text="md-receipt" FontSize="Large" Clicked="Receive_Clicked" />
+            </Grid>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

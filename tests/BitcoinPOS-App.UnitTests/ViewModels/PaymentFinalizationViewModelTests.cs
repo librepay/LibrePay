@@ -13,14 +13,19 @@ namespace BitcoinPOS_App.UnitTests.ViewModels
 {
     public class PaymentFinalizationViewModelTests
     {
-        private PaymentFinalizationViewModel Get(
+        private PaymentFinalizationPageViewModel Get(
             out Mock<INetworkInfoProvider> mockNet
         )
         {
             mockNet = new Mock<INetworkInfoProvider>(MockBehavior.Strict);
-            return new PaymentFinalizationViewModel(
+            var mockVm = new Mock<PaymentFinalizationPageViewModel>(
                 mockNet.Object
-            );
+            ) {CallBase = true};
+
+            mockVm.Setup(v => v.RunOnMainThread(It.IsAny<Action>()))
+                .Callback<Action>(action => action());
+
+            return mockVm.Object;
         }
 
         [Fact]
@@ -30,7 +35,7 @@ namespace BitcoinPOS_App.UnitTests.ViewModels
             const decimal value = 5.5M;
             var messageReceived = false;
 
-            MessagingCenter.Subscribe<PaymentFinalizationViewModel, decimal>(
+            MessagingCenter.Subscribe<PaymentFinalizationPageViewModel, decimal>(
                 this
                 , MessengerKeys.PaymentFullyReceived
                 , (_, arg) =>
@@ -60,7 +65,7 @@ namespace BitcoinPOS_App.UnitTests.ViewModels
         public void StartBackgroundJobChecksIfPaymentAddressIsNotEmpty()
         {
             var mockNet = new Mock<INetworkInfoProvider>(MockBehavior.Strict);
-            var mock = new Mock<PaymentFinalizationViewModel>(
+            var mock = new Mock<PaymentFinalizationPageViewModel>(
                 mockNet.Object
             )
             {
@@ -82,7 +87,7 @@ namespace BitcoinPOS_App.UnitTests.ViewModels
         public void StartBackgroundJobShouldStopOtherIfRunning()
         {
             var mockNet = new Mock<INetworkInfoProvider>(MockBehavior.Strict);
-            var mock = new Mock<PaymentFinalizationViewModel>(
+            var mock = new Mock<PaymentFinalizationPageViewModel>(
                 mockNet.Object
             )
             {
@@ -106,11 +111,11 @@ namespace BitcoinPOS_App.UnitTests.ViewModels
 
             mock.Verify(m => m.StopBackgroundJob(), Times.Once);
             mockNet.Verify(m =>
-                m.WaitCompletePayment(
-                    It.Is<Payment>(i => i.Address == vm.Payment.Address)
-                    , It.IsAny<Action<decimal>>()
-                    , It.IsAny<Action<decimal, decimal>>()
-                )
+                    m.WaitCompletePayment(
+                        It.Is<Payment>(i => i.Address == vm.Payment.Address)
+                        , It.IsAny<Action<decimal>>()
+                        , It.IsAny<Action<decimal, decimal>>()
+                    )
                 , Times.Once
             );
         }

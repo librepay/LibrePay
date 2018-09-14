@@ -63,7 +63,7 @@ namespace BitcoinPOS_App.UnitTests.Services
                     s.SetValueAsync(It.Is<string>(i => i == Constants.LastId), It.Is<long>(i => i == 2L)))
                 .Returns(Task.CompletedTask);
 
-            var exchangeRate = new ExchangeRate(0.5M, DateTime.Now);
+            var exchangeRate = new ExchangeRate(0.5M, "R$/BTC", DateTime.Now);
             mockBtcProvider.Setup(b => b.GetLocalBitcoinPrice())
                 .Returns(Task.FromResult(exchangeRate));
 

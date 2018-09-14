@@ -1,7 +1,9 @@
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading;
 using System.Threading.Tasks;
 using BitcoinPOS_App.Interfaces.Providers;
 using BitcoinPOS_App.Models;
@@ -84,8 +86,9 @@ namespace BitcoinPOS_App.Providers
 
         private Task<HttpResponseMessage> ExecuteRequest(Context _)
         {
-            Debug.WriteLine("[INFO] Buscando preço médio do dia no BitcoinAverage");
-            return HttpClient.GetAsync("/indices/local/ticker/BTCBRL");
+            var ri = new RegionInfo(Thread.CurrentThread.CurrentUICulture.LCID);
+            Debug.WriteLine($"Buscando preço médio do dia no BitcoinAverage BTC <=> {ri.ISOCurrencySymbol}", "INFO");
+            return HttpClient.GetAsync($"/indices/local/ticker/BTC{ri.ISOCurrencySymbol}");
         }
     }
 }

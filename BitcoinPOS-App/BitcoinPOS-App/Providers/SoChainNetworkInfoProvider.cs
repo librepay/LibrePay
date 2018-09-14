@@ -110,6 +110,7 @@ namespace BitcoinPOS_App.Providers
             if (address == null) throw new ArgumentNullException(nameof(address));
             if (onReceiveAnyTx == null) throw new ArgumentNullException(nameof(onReceiveAnyTx));
 
+            //TODO: Use native backgrounding
             var thread = new Thread(WatchAddressInSoChainApi)
             {
                 Name = $"so-chain-addr-checker: {address}",
@@ -126,7 +127,7 @@ namespace BitcoinPOS_App.Providers
 
         private void WatchAddressInSoChainApi(object @param)
         {
-            var info = (WatcherInfo) @param;
+            var info = (WatcherInfo)@param;
             var bitcoinAddress = Network.Parse<BitcoinAddress>(info.Address, null);
             var network = bitcoinAddress.Network == Network.Main
                 ? "BTC"

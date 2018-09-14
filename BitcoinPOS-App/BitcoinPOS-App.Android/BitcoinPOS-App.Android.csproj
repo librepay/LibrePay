@@ -54,7 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Android.Support.Design" Version="27.0.2.1" />
-    <PackageReference Include="Xamarin.Essentials" Version="0.9.1-preview" />
+    <PackageReference Include="Xamarin.Essentials" Version="0.10.0-preview" />
     <PackageReference Include="Xamarin.Forms" Version="3.1.0.697729" />
     <PackageReference Include="Xamarin.Android.Support.v7.AppCompat" Version="27.0.2.1" />
     <PackageReference Include="Xamarin.Android.Support.v4" Version="27.0.2.1" />
@@ -103,6 +103,11 @@
       <Project>{18852b06-4465-4ec4-918f-3669afb9fa3d}</Project>
       <Name>BitcoinPOS-App</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\Fonts\cryptofont-webfont.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AndroidAsset>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

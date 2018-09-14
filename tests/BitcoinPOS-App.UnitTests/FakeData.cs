@@ -5,7 +5,7 @@ namespace BitcoinPOS_App.UnitTests
 {
     public static class FakeData
     {
-        public static readonly ExchangeRate ValidExchangeRate = new ExchangeRate(0.50M, DateTime.Now);
+        public static readonly ExchangeRate ValidExchangeRate = new ExchangeRate(0.50M, "R$/BTC", DateTime.Now);
 
         public static readonly Payment InvalidPaymentWoAddress = new Payment(null, 0.5M, null);
 

@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace BitcoinPOS_App.ViewModels.Base
 {
-    public class BaseViewModel : INotifyPropertyChanged
+    public abstract class BaseViewModel : INotifyPropertyChanged
     {
         protected bool SetProperty<T>(ref T backingStore, T value,
-            [CallerMemberName]string propertyName = "",
-            Action onChanged = null)
+            [CallerMemberName] string propertyName = "",
+            Action onChanged = null
+        )
         {
             if (EqualityComparer<T>.Default.Equals(backingStore, value))
                 return false;
@@ -22,11 +25,27 @@ namespace BitcoinPOS_App.ViewModels.Base
         }
 
         #region INotifyPropertyChanged
+
         public event PropertyChangedEventHandler PropertyChanged;
+
         protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
         #endregion
+
+        public virtual Task InitializeAsync(object[] navigationData)
+        {
+            return Task.FromResult(false);
+        }
+        
+        public virtual void RunOnMainThread(Action action)
+        {
+            if (action == null)
+                throw new ArgumentNullException(nameof(action));
+
+            Device.BeginInvokeOnMainThread(action);
+        }
     }
 }
