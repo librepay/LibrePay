@@ -6,11 +6,9 @@ using BitcoinPOS_App.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace BitcoinPOS_App.Views
-{
+namespace BitcoinPOS_App.Views {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class SettingsPage
-    {
+    public partial class SettingsPage {
         private readonly SettingsPageViewModel _viewModel;
         private readonly INavigationService _navigationService;
         private readonly IMessageDisplayer _messageDisplayer;
@@ -19,8 +17,7 @@ namespace BitcoinPOS_App.Views
             SettingsPageViewModel viewModel
             , INavigationService navigationService
             , IMessageDisplayer messageDisplayer
-        )
-        {
+        ) {
             InitializeComponent();
 
             _navigationService = navigationService;
@@ -30,12 +27,10 @@ namespace BitcoinPOS_App.Views
 
             MessagingCenter.Subscribe<SettingsPageViewModel, Exception>(_viewModel
                 , MessengerKeys.SettingsFailedLoadSettings
-                , (_, ex) =>
-                {
+                , (_, ex) => {
                     Debug.WriteLine($"Erro ao buscar xpub: {Environment.NewLine}{ex}");
 
-                    Device.BeginInvokeOnMainThread(async () =>
-                    {
+                    Device.BeginInvokeOnMainThread(async () => {
                         // needs to be at root to show alerts
                         await _navigationService.ClearStack();
                         await DisplayAlert("Erro", "Erro ao carregar configuração", "Cancelar");
@@ -44,19 +39,17 @@ namespace BitcoinPOS_App.Views
             );
         }
 
-        protected override void OnAppearing()
-        {
+        protected override void OnAppearing() {
             //HACK: Editor doesn't allow selection (https://forums.xamarin.com/discussion/100000/editor-with-textproperty-does-not-support-text-selection)
             EdtXPub.IsEnabled = true;
+            EdtSegWit.IsEnabled = true;
 
             base.OnAppearing();
 
-            _viewModel.LoadSettingsAsync()
-                .ConfigureAwait(false);
+            _viewModel.LoadSettingsAsync().ConfigureAwait(false);
         }
 
-        private async void Save_Clicked(object sender, EventArgs e)
-        {
+        private async void Save_Clicked(object sender, EventArgs e) {
             await _viewModel.SaveSettingsAsync();
 
             // go back in the navigation stack

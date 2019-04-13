@@ -68,9 +68,11 @@ namespace BitcoinPOS_App.UnitTests.ViewModels
         public async Task SaveSettingsAsyncCallsSettingsProviderAsync()
         {
             var vm = Get(out var mockSettings);
+
             mockSettings.Setup(
                 s => s.SetSecureValueAsync(It.Is<string>(i => i == Constants.SettingsXPubKey), It.IsAny<string>())
             ).Returns(Task.CompletedTask);
+
             mockSettings.Setup(
                 s => s.SetValueAsync(It.Is<string>(i => i == Constants.LastId), It.IsAny<long>())
             ).Returns(Task.CompletedTask);
@@ -81,6 +83,7 @@ namespace BitcoinPOS_App.UnitTests.ViewModels
                 s => s.SetSecureValueAsync(It.Is<string>(i => i == Constants.SettingsXPubKey), It.IsAny<string>())
                 , Times.Once
             );
+
             mockSettings.Verify(
                 s => s.SetValueAsync(It.Is<string>(i => i == Constants.LastId), It.IsAny<long>())
                 , Times.Once

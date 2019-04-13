@@ -14,11 +14,19 @@ namespace BitcoinPOS_App.ViewModels
 
         private string _extendedPublicKey;
 
+        private string _settingUseSegwit;
+
         public string ExtendedPublicKey
         {
             get => _extendedPublicKey;
             set => SetProperty(ref _extendedPublicKey, value);
         }
+
+        public string SettingUseSegwit {
+            get => _settingUseSegwit;
+            set => SetProperty(ref _settingUseSegwit, value);
+        }
+
 
         public SettingsPageViewModel(ISettingsProvider settingsProvider)
         {
@@ -50,13 +58,39 @@ namespace BitcoinPOS_App.ViewModels
                     return Task.CompletedTask;
                 })
                 .ConfigureAwait(false);
+
+            // same as above, for fetching if we will use Segregated Witness addresses
+            await _settingsProvider.GetSecureValueAsync<string>(Constants.SettingsUseSegwit)
+                .ContinueWith(t => {
+                    if (t.IsCanceled || t.IsFaulted) {
+                        MessagingCenter.Send<SettingsPageViewModel, Exception>(
+                            this
+                            , MessengerKeys.SettingsFailedLoadSettings
+                            , t.Exception
+                        );
+
+                        return Task.CompletedTask;
+                    }
+
+                    IsLoaded = true;
+                    SettingUseSegwit = t.Result;
+
+                    return Task.CompletedTask;
+                })
+                .ConfigureAwait(false);
         }
 
         public async Task SaveSettingsAsync()
         {
-            // saves the current extended public key
+            // Saves the current extended public key
             await _settingsProvider.SetSecureValueAsync(Constants.SettingsXPubKey, ExtendedPublicKey)
                 .ConfigureAwait(false);
+
+            // Saves if we will use Segwit adresses or not
+            await _settingsProvider.SetSecureValueAsync(Constants.SettingsUseSegwit, SettingUseSegwit)
+                .ConfigureAwait(false);
+
+            // Saves the last sequential ID (path) used.
             await _settingsProvider.SetValueAsync(Constants.LastId, 0L)
                 .ConfigureAwait(false);
         }

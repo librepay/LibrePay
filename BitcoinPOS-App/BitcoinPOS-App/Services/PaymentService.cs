@@ -31,6 +31,8 @@ namespace BitcoinPOS_App.Services
                 throw new ArgumentNullException(nameof(payment));
 
             var rawXPub = await _settingsProvider.GetSecureValueAsync<string>(Constants.SettingsXPubKey);
+            var useSegwit = await _settingsProvider.GetSecureValueAsync<string>(Constants.SettingsUseSegwit);
+
             var bitcoinExtPubKey = new BitcoinExtPubKey(rawXPub);
             var xpub = bitcoinExtPubKey.ExtPubKey;
 
@@ -38,10 +40,23 @@ namespace BitcoinPOS_App.Services
             await _settingsProvider.SetValueAsync(Constants.LastId, id);
 
             payment.Id = id;
-            payment.Address = xpub.Derive((uint) id)
-                .PubKey
-                .GetAddress(bitcoinExtPubKey.Network)
-                .ToString();
+
+            // !!! Derivation path changed to be compatible with Coinomi wallet
+            // !!! This path must be set in the Settings page
+            KeyPath path = new KeyPath("0/" + id);
+
+            if (useSegwit.ToUpper() == "YES") {
+                payment.Address = xpub.Derive(path)
+                    .PubKey
+                    .GetSegwitAddress(bitcoinExtPubKey.Network)
+                    .ToString();
+            }
+            else {
+                payment.Address = xpub.Derive(path)
+                    .PubKey
+                    .GetAddress(bitcoinExtPubKey.Network)
+                    .ToString();
+            }
             payment.Done = false;
 
             return payment;

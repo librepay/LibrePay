@@ -3,6 +3,7 @@
     public static class Constants
     {
         public const string SettingsXPubKey = "xpub-key";
+        public const string SettingsUseSegwit = "use-segwit";
 
         public const int BitcoinDecimals = 8;
 

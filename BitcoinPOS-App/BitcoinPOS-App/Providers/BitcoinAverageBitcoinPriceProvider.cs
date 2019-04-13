@@ -88,7 +88,13 @@ namespace BitcoinPOS_App.Providers
         {
             var ri = new RegionInfo(Thread.CurrentThread.CurrentUICulture.LCID);
             Debug.WriteLine($"Buscando preço médio do dia no BitcoinAverage BTC <=> {ri.ISOCurrencySymbol}", "INFO");
-            return HttpClient.GetAsync($"/indices/local/ticker/BTC{ri.ISOCurrencySymbol}");
+
+            // !!! Currency symbol must be set on the Settings page
+            // !!! Just getting the symbol automaticaly is not acceptable
+            // !!! because user can have phone set on one region while actually being in another place
+            //return HttpClient.GetAsync($"/indices/local/ticker/BTC{ri.ISOCurrencySymbol}");
+
+            return HttpClient.GetAsync($"/indices/local/ticker/BTCBRL");
         }
     }
 }
