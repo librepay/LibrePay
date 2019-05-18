@@ -1,4 +1,4 @@
-# Bitcoin POS App
+# LibrePay
 
 This project uses [Xamarin][xamarin-docs] to create a app that runs natively on any
 portable device.
