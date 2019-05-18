@@ -45,18 +45,21 @@ namespace LibrePay.Services
             // !!! This path must be set in the Settings page
             KeyPath path = new KeyPath("0/" + id);
 
-            if (useSegwit.ToUpper() == "YES") {
+            if (useSegwit.ToUpper() == "YES")
+            {
                 payment.Address = xpub.Derive(path)
                     .PubKey
-                    .GetSegwitAddress(bitcoinExtPubKey.Network)
+                    .GetAddress(ScriptPubKeyType.Segwit, bitcoinExtPubKey.Network)
                     .ToString();
             }
-            else {
+            else
+            {
                 payment.Address = xpub.Derive(path)
                     .PubKey
-                    .GetAddress(bitcoinExtPubKey.Network)
+                    .GetAddress(ScriptPubKeyType.SegwitP2SH, bitcoinExtPubKey.Network)
                     .ToString();
             }
+
             payment.Done = false;
 
             return payment;
