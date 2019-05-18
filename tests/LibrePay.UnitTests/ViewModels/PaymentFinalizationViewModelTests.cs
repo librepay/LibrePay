@@ -56,7 +56,7 @@ namespace LibrePay.UnitTests.ViewModels
         {
             var vm = Get(out _);
 
-            vm.CopyToClipboard("test");
+            await vm.CopyToClipboardAsync("test");
 
             Assert.Equal("test", await Clipboard.GetTextAsync());
         }

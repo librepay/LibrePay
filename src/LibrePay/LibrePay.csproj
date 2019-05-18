@@ -8,16 +8,16 @@
         <ProjectGuid>{18852b06-4465-4ec4-918f-3669afb9fa3d}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Autofac" Version="4.8.1" />
-        <PackageReference Include="NBitcoin" Version="4.1.1.45" />
-        <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+        <PackageReference Include="Autofac" Version="4.9.2" />
+        <PackageReference Include="NBitcoin" Version="4.1.2.32" />
+        <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
         <PackageReference Include="Polly" Version="6.1.0" />
         <PackageReference Include="Polly.Caching.Memory" Version="2.0.0" />
-        <PackageReference Include="QRCoder" Version="1.3.3" />
-        <PackageReference Include="Xam.Plugin.Iconize" Version="2.0.0.37-beta"/>
-        <PackageReference Include="Xam.Plugin.Iconize.Material" Version="2.0.0.37-beta"/>
+        <PackageReference Include="QRCoder" Version="1.3.5" />
+        <PackageReference Include="Xam.Plugin.Iconize" Version="2.0.0.37-beta" />
+        <PackageReference Include="Xam.Plugin.Iconize.Material" Version="2.0.0.37-beta" />
         <PackageReference Include="Xam.Plugins.Settings" Version="3.1.1" />
-        <PackageReference Include="Xamarin.Essentials" Version="0.10.0-preview" />
-        <PackageReference Include="Xamarin.Forms" Version="3.1.0.697729" />
+        <PackageReference Include="Xamarin.Essentials" Version="1.1.0" />
+        <PackageReference Include="Xamarin.Forms" Version="3.6.0.344457" />
     </ItemGroup>
 </Project>

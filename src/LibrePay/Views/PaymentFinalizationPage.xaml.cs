@@ -66,8 +66,9 @@ namespace LibrePay.Views
         {
             base.OnAppearing();
 
-            _viewModel.CopyToClipboard(_viewModel.Payment.Address);
-            _msgDisplayer.ShowMessageAsync("Copiado endereço");
+            _viewModel.CopyToClipboardAsync(_viewModel.Payment.Address)
+                .ContinueWith(_ => _msgDisplayer.ShowMessageAsync("Copiado endereço"),
+                    TaskContinuationOptions.OnlyOnRanToCompletion);
 
             _viewModel.StartBackgroundJob();
         }
@@ -103,7 +104,7 @@ namespace LibrePay.Views
 
         private async void LabelCopy_Clicked(object sender, EventArgs e)
         {
-            _viewModel.CopyToClipboard(((Label) sender).Text);
+            await _viewModel.CopyToClipboardAsync(((Label) sender).Text);
             await _msgDisplayer.ShowMessageAsync("Copiado");
         }
 
