@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LibrePay.Views.PaymentFinalizationPage"
+             Title="Finalização de Pgto">
+    <ContentPage.Content>
+        <StackLayout Margin="10">
+            <Label Text="Aguardando pagamento" Style="{StaticResource HeaderText}" />
+            <Image HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="0"
+                   Source="{Binding Payment, Mode=OneWay, Converter={StaticResource QrCodeConverter}}" />
+            <Label Text="{Binding Payment.Address, Mode=OneWay}" HorizontalOptions="CenterAndExpand"
+                   VerticalOptions="CenterAndExpand">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="LabelCopy_Clicked" />
+                </Label.GestureRecognizers>
+            </Label>
+
+            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                <Label Style="{StaticResource SubHeaderText}" Text="{Binding MissingAmount, Mode=OneWay}"
+                       HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="LabelCopy_Clicked" />
+                    </Label.GestureRecognizers>
+                </Label>
+                <Label Style="{StaticResource SubHeaderText}"
+                       Text="{Binding Payment.ValueFiat, Mode=OneWay, StringFormat='{0:C}'}"
+                       HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="LabelCopy_Clicked" />
+                    </Label.GestureRecognizers>
+                </Label>
+            </StackLayout>
+
+            <Button Style="{StaticResource ButtonPrimary}" Text="Cancelar" Clicked="Cancel_Clicked" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

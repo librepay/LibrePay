@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Application xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:LibrePay.Converters;assembly=LibrePay"
+             x:Class="LibrePay.App">
+    <Application.Resources>
+        <ResourceDictionary>
+            <!-- Global Colors -->
+            <Color x:Key="PrimaryColor">#2196F3</Color>
+            <Color x:Key="PrimaryForegroundColor">#FFF</Color>
+            <Color x:Key="PinpadTextColor">#000</Color>
+            <x:Int32 x:Key="PinpadTextSize">16</x:Int32>
+            <!-- Global Settings -->
+            <x:Int32 x:Key="PrimaryBorderRadius">5</x:Int32>
+            <x:Int32 x:Key="SecondaryBorderRadius">10</x:Int32>
+
+            <!--Navigation Page-->
+            <Style TargetType="NavigationPage">
+                <Setter Property="BarBackgroundColor" Value="{StaticResource PrimaryColor}" />
+                <Setter Property="BarTextColor" Value="{StaticResource PrimaryForegroundColor}" />
+            </Style>
+
+            <!-- Buttons -->
+            <Style TargetType="Button">
+                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryForegroundColor}" />
+                <Setter Property="CornerRadius" Value="{StaticResource PrimaryBorderRadius}" />
+            </Style>
+            <Style x:Key="ButtonPrimary" TargetType="Button">
+                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor}" />
+                <Setter Property="TextColor" Value="{StaticResource PrimaryForegroundColor}" />
+                <Setter Property="FontAttributes" Value="Bold" />
+
+                <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="VerticalOptions" Value="Center" />
+            </Style>
+
+            <Style x:Key="ButtonPinpad" TargetType="Button">
+                <Setter Property="TextColor" Value="{StaticResource PinpadTextColor}" />
+                <Setter Property="FontSize" Value="{StaticResource PinpadTextSize}" />
+                <Setter Property="FontAttributes" Value="Bold" />
+
+                <Setter Property="HeightRequest" Value="85" />
+                <Setter Property="WidthRequest" Value="85" />
+
+                <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="VerticalOptions" Value="Center" />
+            </Style>
+            <Style x:Key="ButtonPrimaryPinpad" BasedOn="{StaticResource ButtonPrimary}" TargetType="Button">
+                <Setter Property="HeightRequest" Value="85" />
+                <Setter Property="WidthRequest" Value="85" />
+            </Style>
+
+            <!-- Typography -->
+            <Style x:Key="HeaderText" TargetType="Label">
+                <Setter Property="VerticalOptions" Value="CenterAndExpand" />
+                <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
+                <Setter Property="FontSize" Value="28" />
+                <Setter Property="TextColor" Value="{StaticResource PrimaryColor}" />
+            </Style>
+            <Style x:Key="SubHeaderText" TargetType="Label">
+                <Setter Property="VerticalOptions" Value="CenterAndExpand" />
+                <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
+                <Setter Property="FontSize" Value="18" />
+                <Setter Property="TextColor" Value="Black" />
+            </Style>
+
+            <!-- Global Converters -->
+            <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+            <converters:QrCodeConverter x:Key="QrCodeConverter" />
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

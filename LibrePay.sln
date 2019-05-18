@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitcoinPOS-App.Android", "BitcoinPOS-App\BitcoinPOS-App.Android\BitcoinPOS-App.Android.csproj", "{F2D26CD4-6482-4613-859B-1D190C87F79A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibrePay.Android", "src\LibrePay.Android\LibrePay.Android.csproj", "{F2D26CD4-6482-4613-859B-1D190C87F79A}"
 EndProject
-#Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitcoinPOS-App.iOS", "BitcoinPOS-App\BitcoinPOS-App.iOS\BitcoinPOS-App.iOS.csproj", "{32CB2BC7-944F-415C-9DCD-1BCB5099EF32}"
-#EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BitcoinPOS-App", "BitcoinPOS-App\BitcoinPOS-App\BitcoinPOS-App.csproj", "{18852B06-4465-4EC4-918F-3669AFB9FA3D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibrePay.iOS", "src\LibrePay.iOS\LibrePay.iOS.csproj", "{32CB2BC7-944F-415C-9DCD-1BCB5099EF32}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{57C50FFC-9DF9-40AC-B553-4FBC8CD23B2A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibrePay", "src\LibrePay\LibrePay.csproj", "{18852B06-4465-4EC4-918F-3669AFB9FA3D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{57C50FFC-9DF9-40AC-B553-4FBC8CD23B2A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{91A8F3B7-96C8-4B67-9636-D8EFB8541089}"
 	ProjectSection(SolutionItems) = preProject
@@ -17,7 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{91A8F3B7-9
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitcoinPOS-App.UnitTests", "tests\BitcoinPOS-App.UnitTests\BitcoinPOS-App.UnitTests.csproj", "{94DF101B-B18B-4597-A7C0-E7C978CBCEB0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibrePay.UnitTests", "tests\LibrePay.UnitTests\LibrePay.UnitTests.csproj", "{94DF101B-B18B-4597-A7C0-E7C978CBCEB0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
