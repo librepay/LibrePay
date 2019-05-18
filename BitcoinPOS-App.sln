@@ -5,8 +5,8 @@ VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitcoinPOS-App.Android", "BitcoinPOS-App\BitcoinPOS-App.Android\BitcoinPOS-App.Android.csproj", "{F2D26CD4-6482-4613-859B-1D190C87F79A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitcoinPOS-App.iOS", "BitcoinPOS-App\BitcoinPOS-App.iOS\BitcoinPOS-App.iOS.csproj", "{32CB2BC7-944F-415C-9DCD-1BCB5099EF32}"
-EndProject
+#Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitcoinPOS-App.iOS", "BitcoinPOS-App\BitcoinPOS-App.iOS\BitcoinPOS-App.iOS.csproj", "{32CB2BC7-944F-415C-9DCD-1BCB5099EF32}"
+#EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BitcoinPOS-App", "BitcoinPOS-App\BitcoinPOS-App\BitcoinPOS-App.csproj", "{18852B06-4465-4EC4-918F-3669AFB9FA3D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{57C50FFC-9DF9-40AC-B553-4FBC8CD23B2A}"

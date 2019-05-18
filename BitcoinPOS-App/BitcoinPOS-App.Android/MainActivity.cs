@@ -2,6 +2,7 @@
 using Android.Content.PM;
 using Android.OS;
 using Autofac;
+using Plugin.Iconize;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
@@ -20,7 +21,7 @@ namespace BitcoinPOS_App.Droid
             base.OnCreate(bundle);
 
             Forms.Init(this, bundle);
-            Plugin.Iconize.Iconize.Init(Resource.Id.toolbar, Resource.Id.sliding_tabs);
+            Iconize.Init(Resource.Id.toolbar, Resource.Id.sliding_tabs);
             LoadApplication(new App(ConfigDI));
         }
 
