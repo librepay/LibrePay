@@ -25,7 +25,7 @@ namespace LibrePay.Providers
     public class BitcoinAverageBitcoinPriceProvider : IBitcoinPriceProvider
     {
         private static readonly HttpClient HttpClient;
-        private static readonly Policy<HttpResponseMessage> DefaultPolicy;
+        private static readonly AsyncPolicy<HttpResponseMessage> DefaultPolicy;
         private static readonly Context LocalPriceContext = new Context("local-price");
 
         static BitcoinAverageBitcoinPriceProvider()

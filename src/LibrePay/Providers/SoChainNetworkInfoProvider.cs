@@ -25,7 +25,7 @@ namespace LibrePay.Providers
     public class SoChainNetworkInfoProvider : INetworkInfoProvider
     {
         private static readonly HttpClient HttpClient;
-        private static readonly Policy<HttpResponseMessage> SoChainPolicy;
+        private static readonly AsyncPolicy<HttpResponseMessage> SoChainPolicy;
 
         static SoChainNetworkInfoProvider()
         {
