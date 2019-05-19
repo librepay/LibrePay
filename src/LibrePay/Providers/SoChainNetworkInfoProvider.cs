@@ -128,7 +128,7 @@ namespace LibrePay.Providers
         private void WatchAddressInSoChainApi(object @param)
         {
             var info = (WatcherInfo)@param;
-            var bitcoinAddress = Network.Parse<BitcoinAddress>(info.Address, null);
+            var bitcoinAddress = Network.Parse<BitcoinAddress>(info.Address);
             var network = bitcoinAddress.Network == Network.Main
                 ? "BTC"
                 : "BTCTEST";

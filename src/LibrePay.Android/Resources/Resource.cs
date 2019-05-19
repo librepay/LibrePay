@@ -1,4 +1,4 @@
-namespace LibrePay.Droid.Resources
+namespace LibrePay.Droid
 {
     public partial class Resource
     {

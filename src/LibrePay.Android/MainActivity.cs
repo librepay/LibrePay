@@ -5,7 +5,6 @@ using Autofac;
 using Plugin.Iconize;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
-using Resource = LibrePay.Droid.Resources.Resource;
 
 namespace LibrePay.Droid
 {
