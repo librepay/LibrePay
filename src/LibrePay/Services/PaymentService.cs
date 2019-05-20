@@ -30,22 +30,22 @@ namespace LibrePay.Services
             if (payment == null)
                 throw new ArgumentNullException(nameof(payment));
 
-            var rawXPub = await _settingsProvider.GetSecureValueAsync<string>(Constants.SettingsXPubKey);
-            var useSegwit = await _settingsProvider.GetSecureValueAsync<string>(Constants.SettingsUseSegwit);
+            var rawXPub = await _settingsProvider.GetSecureValueAsync<string>(SettingsKeys.XPubKey);
+            var useSegwit = await _settingsProvider.GetValueAsync<bool>(SettingsKeys.UseSegwit);
 
             var bitcoinExtPubKey = new BitcoinExtPubKey(rawXPub);
             var xpub = bitcoinExtPubKey.ExtPubKey;
 
-            var id = await _settingsProvider.GetValueAsync<long>(Constants.LastId) + 1L;
-            await _settingsProvider.SetValueAsync(Constants.LastId, id);
+            var id = await _settingsProvider.GetValueAsync<long>(SettingsKeys.LastId) + 1L;
+            await _settingsProvider.SetValueAsync(SettingsKeys.LastId, id);
 
             payment.Id = id;
 
             // !!! Derivation path changed to be compatible with Coinomi wallet
             // !!! This path must be set in the Settings page
-            KeyPath path = new KeyPath("0/" + id);
+            var path = new KeyPath("0/" + id);
 
-            if (useSegwit.ToUpper() == "YES")
+            if (useSegwit)
             {
                 payment.Address = xpub.Derive(path)
                     .PubKey

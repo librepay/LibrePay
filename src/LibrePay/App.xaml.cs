@@ -1,6 +1,9 @@
 using System;
 using System.Diagnostics;
+using System.Globalization;
+using System.Threading;
 using Autofac;
+using LibrePay.Interfaces.Providers;
 using LibrePay.Interfaces.Services.Navigation;
 using LibrePay.ViewModels;
 using NBitcoin;
@@ -15,28 +18,62 @@ namespace LibrePay
 {
     public partial class App
     {
+        private readonly Action<ContainerBuilder> _configDI;
         public static ILifetimeScope Container { get; private set; }
 
         public const string Name = "LibrePay";
 
         public App(Action<ContainerBuilder> configDI)
         {
+            _configDI = configDI ?? throw new ArgumentNullException(nameof(configDI));
             InitializeComponent();
-            CreateDIContainer(configDI);
+
 
             // Adds entropy to the random utility used by NBitcoin
             RandomUtils.AddEntropy($"{DateTime.Now.Ticks}-{Device.RuntimePlatform}");
 
             Iconize.With(new MaterialModule());
 
+            Init();
+        }
+
+        internal void Init()
+        {
+            CreateDIContainer();
+
+            var cultureInfo = Container.Resolve<CultureInfo>();
+            CultureInfo.DefaultThreadCurrentCulture =
+                CultureInfo.DefaultThreadCurrentUICulture =
+                    CultureInfo.CurrentCulture =
+                        CultureInfo.CurrentUICulture =
+                            cultureInfo;
+            Thread.CurrentThread.CurrentCulture = cultureInfo;
+            Thread.CurrentThread.CurrentUICulture = cultureInfo;
+
             Container.Resolve<INavigationService>()
                 .InitializeAsync<MainPageViewModel>();
         }
 
-        private void CreateDIContainer(Action<ContainerBuilder> configDI)
+        private CultureInfo RegisterCulture(IComponentContext ctx)
         {
-            if (configDI == null)
-                throw new ArgumentNullException(nameof(configDI));
+            var settingsProvider = ctx.Resolve<ISettingsProvider>();
+            var cultureTag = settingsProvider.GetValueAsync<string>(SettingsKeys.CultureTag)
+                .Result;
+
+            if (string.IsNullOrWhiteSpace(cultureTag))
+            {
+                var currentCulture = Thread.CurrentThread.CurrentCulture;
+                settingsProvider.SetValueAsync(SettingsKeys.CultureTag, currentCulture.IetfLanguageTag)
+                    .Wait();
+                return currentCulture;
+            }
+
+            return CultureInfo.GetCultureInfoByIetfLanguageTag(cultureTag);
+        }
+
+        private void CreateDIContainer()
+        {
+            Container?.Dispose();
 
             var cb = new ContainerBuilder();
 
@@ -62,8 +99,12 @@ namespace LibrePay
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
+            // register culture
+            cb.Register(RegisterCulture)
+                .SingleInstance();
+
             // register platform specific
-            configDI(cb);
+            _configDI(cb);
 
             Container = cb.Build().BeginLifetimeScope();
         }

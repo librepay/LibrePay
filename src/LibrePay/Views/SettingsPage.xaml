@@ -1,4 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
+
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="LibrePay.Views.SettingsPage"
@@ -7,14 +8,22 @@
         <ToolbarItem Text="Salvar" Clicked="Save_Clicked" />
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <StackLayout x:Name="SettingsStack" Margin="10">
-            <Label Text="Extended Public Key (BIP32)" />
-            <Editor x:Name="EdtXPub" IsSpellCheckEnabled="False" IsEnabled="False" Text="{Binding ExtendedPublicKey}" HeightRequest="200"/>
-
-            <Label Text="Use SegWit addresses?" />
-            <Editor x:Name="EdtSegWit" IsSpellCheckEnabled="False" IsEnabled="False" Text="{Binding SettingUseSegwit}" HeightRequest="100"/>
-            
-            <Button Style="{StaticResource ButtonPrimary}" Text="Salvar" Clicked="Save_Clicked" />
-        </StackLayout>
+        <TableView Intent="Settings">
+            <TableRoot>
+                <TableSection Title="Master key (XPUB)">
+                    <ViewCell Height="200">
+                        <Editor x:Name="EdtXPub" IsSpellCheckEnabled="False" IsEnabled="False"
+                                Text="{Binding ExtendedPublicKey}" HeightRequest="200" />
+                    </ViewCell>
+                </TableSection>
+                <TableSection Title="Address generation">
+                    <SwitchCell Text="Use SegWit" On="{Binding UseSegwit}" />
+                </TableSection>
+                <TableSection Title="Localization">
+                    <TextCell Tapped="CultureCell_OnTapped" Text="Culture/Currency (Requires restart)"
+                              Detail="{Binding CurrentCultureView, Mode=OneTime}" />
+                </TableSection>
+            </TableRoot>
+        </TableView>
     </ContentPage.Content>
 </ContentPage>

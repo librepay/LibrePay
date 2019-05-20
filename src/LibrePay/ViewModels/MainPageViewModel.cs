@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Globalization;
-using System.Threading;
 using System.Threading.Tasks;
 using LibrePay.Interfaces.Providers;
 using LibrePay.Interfaces.Services;
@@ -16,7 +15,7 @@ namespace LibrePay.ViewModels
         private readonly IPaymentService _paymentService;
         private readonly ISettingsProvider _settingsProvider;
         private readonly IBitcoinPriceProvider _bitcoinPriceProvider;
-        private readonly CultureInfo _culture;
+        private readonly CultureInfo _cultureInfo;
 
         private Pinpad _transactionValueCrypto;
         private Pinpad _transactionValue;
@@ -60,6 +59,7 @@ namespace LibrePay.ViewModels
             IPaymentService paymentService
             , ISettingsProvider settingsProvider
             , IBitcoinPriceProvider bitcoinPriceProvider
+            , CultureInfo cultureInfo
         )
         {
             PinpadNumberCommand = new Command(SetPinpadNumber);
@@ -68,7 +68,7 @@ namespace LibrePay.ViewModels
             _settingsProvider = settingsProvider;
             _bitcoinPriceProvider = bitcoinPriceProvider;
 
-            _culture = Thread.CurrentThread.CurrentCulture;
+            _cultureInfo = cultureInfo;
 
             ResetPinpad();
 
@@ -106,7 +106,7 @@ namespace LibrePay.ViewModels
         public async Task<bool> CheckXPubExists()
         {
             Debug.WriteLine("Checkando se tem xpub key configurada...");
-            var xpub = await _settingsProvider.GetSecureValueAsync<string>(Constants.SettingsXPubKey)
+            var xpub = await _settingsProvider.GetSecureValueAsync<string>(SettingsKeys.XPubKey)
                 .ConfigureAwait(false);
             return !string.IsNullOrWhiteSpace(xpub);
         }
@@ -115,8 +115,8 @@ namespace LibrePay.ViewModels
         {
             Debug.WriteLine("Reiniciando o pinpad...", "INFO");
 
-            TransactionValue = new Pinpad(2, 10, _culture);
-            TransactionValueCrypto = new Pinpad(8, 11, _culture);
+            TransactionValue = new Pinpad(2, 10, _cultureInfo);
+            TransactionValueCrypto = new Pinpad(8, 11, _cultureInfo);
 
             IsBusy = false;
         }
@@ -192,13 +192,13 @@ namespace LibrePay.ViewModels
         private void UpdateExchangedValueFiat()
         {
             TransactionValue.Value = ExchangeRate?.ExchangeValueFrom(TransactionValueCrypto.ValueDecimal)
-                .ToString(TransactionValue.Format, _culture);
+                .ToString(TransactionValue.Format, _cultureInfo);
         }
 
         private void UpdateExchangedValueCrypto()
         {
             TransactionValueCrypto.Value = ExchangeRate?.ExchangeValueTo(TransactionValue.ValueDecimal)
-                .ToString(TransactionValueCrypto.Format, _culture);
+                .ToString(TransactionValueCrypto.Format, _cultureInfo);
         }
 
         public bool SwitchEnteringSymbol()

@@ -15,6 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{91A8F3B7-9
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 		README.md = README.md
+		global.json = global.json
+		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibrePay.UnitTests", "tests\LibrePay.UnitTests\LibrePay.UnitTests.csproj", "{94DF101B-B18B-4597-A7C0-E7C978CBCEB0}"

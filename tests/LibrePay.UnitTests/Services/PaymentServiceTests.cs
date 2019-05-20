@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Threading.Tasks;
 using LibrePay.Interfaces.Providers;
 using LibrePay.Interfaces.Services;
@@ -55,15 +56,17 @@ namespace LibrePay.UnitTests.Services
             mockPayment.Setup(p => p.GeneratePaymentAddressAsync(It.IsAny<Payment>()))
                 .CallBase();
 
-            mockSettings.Setup(s => s.GetSecureValueAsync<string>(It.Is<string>(i => i == Constants.SettingsXPubKey)))
-                .Returns(Task.FromResult(FakeData.ValidXPub));
-            mockSettings.Setup(s => s.GetValueAsync<long>(It.Is<string>(i => i == Constants.LastId)))
-                .Returns(Task.FromResult(1L));
+            mockSettings.Setup(s => s.GetSecureValueAsync<string>(It.Is<string>(i => i == SettingsKeys.XPubKey)))
+                .ReturnsAsync(FakeData.ValidXPub);
+            mockSettings.Setup(s => s.GetValueAsync<bool>(It.Is<string>(i => i == SettingsKeys.UseSegwit)))
+                .ReturnsAsync(true);
+            mockSettings.Setup(s => s.GetValueAsync<long>(It.Is<string>(i => i == SettingsKeys.LastId)))
+                .ReturnsAsync(1L);
             mockSettings.Setup(s =>
-                    s.SetValueAsync(It.Is<string>(i => i == Constants.LastId), It.Is<long>(i => i == 2L)))
+                    s.SetValueAsync(It.Is<string>(i => i == SettingsKeys.LastId), It.Is<long>(i => i == 2L)))
                 .Returns(Task.CompletedTask);
 
-            var exchangeRate = new ExchangeRate(0.5M, "R$/BTC", DateTime.Now);
+            var exchangeRate = new ExchangeRate(0.5M, "R$/BTC", DateTime.Now, CultureInfo.InvariantCulture);
             mockBtcProvider.Setup(b => b.GetLocalBitcoinPrice())
                 .Returns(Task.FromResult(exchangeRate));
 
@@ -78,11 +81,12 @@ namespace LibrePay.UnitTests.Services
 
             // verifications
             mockPayment.Verify(p => p.GeneratePaymentAddressAsync(It.IsAny<Payment>()), Times.Once);
-            mockSettings.Verify(s => s.GetSecureValueAsync<string>(It.Is<string>(i => i == Constants.SettingsXPubKey))
+            mockSettings.Verify(s => s.GetSecureValueAsync<string>(It.Is<string>(i => i == SettingsKeys.XPubKey))
                 , Times.Once);
-            mockSettings.Verify(s => s.GetValueAsync<long>(It.Is<string>(i => i == Constants.LastId)), Times.Once);
+            mockSettings.Verify(s => s.GetValueAsync<bool>(It.Is<string>(i => i == SettingsKeys.UseSegwit)), Times.Once);
+            mockSettings.Verify(s => s.GetValueAsync<long>(It.Is<string>(i => i == SettingsKeys.LastId)), Times.Once);
             mockSettings.Verify(s =>
-                s.SetValueAsync(It.Is<string>(i => i == Constants.LastId), It.Is<long>(i => i == 2L)), Times.Once);
+                s.SetValueAsync(It.Is<string>(i => i == SettingsKeys.LastId), It.Is<long>(i => i == 2L)), Times.Once);
             mockBtcProvider.Verify(b => b.GetLocalBitcoinPrice(), Times.Once);
         }
     }

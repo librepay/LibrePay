@@ -22,6 +22,8 @@
 
         public const string SettingsFailedLoadSettings = "failed-load-settings";
 
+        public const string SettingsCultureReset = "culture-reset-settings";
+
         #endregion
     }
 }

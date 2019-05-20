@@ -11,7 +11,7 @@ namespace LibrePay.UnitTests.Models
         [Fact]
         public void ToStringIsOverriden()
         {
-            var er = new ExchangeRate(0.5M, "R$/BTC", DateTime.Now);
+            var er = new ExchangeRate(0.5M, "R$/BTC", DateTime.Now, CultureInfo.InvariantCulture);
 
             Assert.Equal($"Rate: {er.DisplayRate}\n" + $"Date: {er.Date:d}", er.ToString());
         }
@@ -19,7 +19,7 @@ namespace LibrePay.UnitTests.Models
         [Fact]
         public void GetExchangedValueReturnsANumberRoundedBy8()
         {
-            var er = new ExchangeRate(5999999M, "R$/BTC", DateTime.Now);
+            var er = new ExchangeRate(5999999M, "R$/BTC", DateTime.Now, CultureInfo.InvariantCulture);
             var valueFiat = 15M;
 
             var result = er.ExchangeValueTo(valueFiat);

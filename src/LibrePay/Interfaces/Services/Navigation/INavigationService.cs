@@ -14,7 +14,7 @@ namespace LibrePay.Interfaces.Services.Navigation
 
         // Page
 
-        Task NavigateToAsync<TViewModel>(params object[] parameter) where TViewModel : BaseViewModel;
+        Task NavigateToAsync<TViewModel>(params object[] parameters) where TViewModel : BaseViewModel;
 
         Task PopStackAsync();
 

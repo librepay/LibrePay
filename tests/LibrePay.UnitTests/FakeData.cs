@@ -1,11 +1,13 @@
 using System;
+using System.Globalization;
 using LibrePay.Models;
 
 namespace LibrePay.UnitTests
 {
     public static class FakeData
     {
-        public static readonly ExchangeRate ValidExchangeRate = new ExchangeRate(0.50M, "R$/BTC", DateTime.Now);
+        public static readonly ExchangeRate ValidExchangeRate
+            = new ExchangeRate(0.50M, "R$/BTC", DateTime.Now, CultureInfo.InvariantCulture);
 
         public static readonly Payment InvalidPaymentWoAddress = new Payment(null, 0.5M, null);
 
@@ -25,6 +27,6 @@ namespace LibrePay.UnitTests
         public const string ValidXPub =
             "tpubDCiHcfHhKqUkdfbUKdTSHRFqqZvMmSJgbnPdvtkmWyDeeJY8FTBTwHfDFYnyxJaqYeHr85RbdmsWs7LqxQ29yr1RXZYnD6N5dGCLHyBip3h";
 
-        public const string ValidXPubAddressDerivedNum2 = "msHGChvTPyVchCW881Y9gr2NZDAFETLJFZ";
+        public const string ValidXPubAddressDerivedNum2 = "tb1q89j25da5dzlm42em8zn293mc8w00lhx8t5nn23";
     }
 }

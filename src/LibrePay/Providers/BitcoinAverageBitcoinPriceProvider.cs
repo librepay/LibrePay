@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading;
 using System.Threading.Tasks;
 using LibrePay.Interfaces.Providers;
 using LibrePay.Models;
@@ -27,6 +26,17 @@ namespace LibrePay.Providers
         private static readonly HttpClient HttpClient;
         private static readonly AsyncPolicy<HttpResponseMessage> DefaultPolicy;
         private static readonly Context LocalPriceContext = new Context("local-price");
+
+        private readonly CultureInfo _cultureInfo;
+        private readonly RegionInfo _regionInfo;
+
+        public BitcoinAverageBitcoinPriceProvider(
+            CultureInfo cultureInfo
+        )
+        {
+            _cultureInfo = cultureInfo;
+            _regionInfo = new RegionInfo(_cultureInfo.LCID);
+        }
 
         static BitcoinAverageBitcoinPriceProvider()
         {
@@ -81,20 +91,18 @@ namespace LibrePay.Providers
 
             Debug.WriteLine($"[INFO] Obteu valor de troca: {price}");
 
-            return new ExchangeRate(price, "R$/BTC", date);
+            return new ExchangeRate(price, $"{_regionInfo.CurrencySymbol}/BTC", date, _cultureInfo);
         }
 
         private Task<HttpResponseMessage> ExecuteRequest(Context _)
         {
-            var ri = new RegionInfo(Thread.CurrentThread.CurrentUICulture.LCID);
-            Debug.WriteLine($"Buscando preço médio do dia no BitcoinAverage BTC <=> {ri.ISOCurrencySymbol}", "INFO");
+            Debug.WriteLine($"Buscando preço médio do dia no BitcoinAverage BTC <=> {_regionInfo.ISOCurrencySymbol}", "INFO");
 
             // !!! Currency symbol must be set on the Settings page
             // !!! Just getting the symbol automaticaly is not acceptable
             // !!! because user can have phone set on one region while actually being in another place
-            //return HttpClient.GetAsync($"/indices/local/ticker/BTC{ri.ISOCurrencySymbol}");
-
-            return HttpClient.GetAsync($"/indices/local/ticker/BTCBRL");
+			//TODO: Fix this with a user prompt? maybe is more of a UX problem
+            return HttpClient.GetAsync($"/indices/local/ticker/BTC{_regionInfo.ISOCurrencySymbol}");
         }
     }
 }
