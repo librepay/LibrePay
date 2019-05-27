@@ -15,7 +15,7 @@ To check on how to build this app, refer to the [building wiki page][wiki-buildi
 
 It is required that you meet all the [requirements][wiki-requirements]
 
- [wiki-building]: wiki/Building
- [wiki-requirements]: wiki/Requirements
+ [wiki-building]: ../../wiki/Building
+ [wiki-requirements]: ../../wiki/Requirements
  [xamarin-docs]: https://docs.microsoft.com/en-us/xamarin/
  [xamarin-install]: https://docs.microsoft.com/en-us/xamarin/get-started/installation/index
