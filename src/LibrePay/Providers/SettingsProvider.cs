@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -47,7 +47,7 @@ namespace LibrePay.Providers
             }
             catch (Exception e)
             {
-                Debug.WriteLine("ERRO: Falha ao buscar config segura. {0}", e);
+                Debug.WriteLine("ERROR: Fail while fetching secure config. {0}", e);
                 secureValue = null;
             }
 

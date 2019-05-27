@@ -18,11 +18,11 @@ namespace LibrePay.Models
             set
             {
                 if (!string.IsNullOrWhiteSpace(Address))
-                    throw new InvalidOperationException("Não é possível alterar o valor após iniciado o pagamento");
+                    throw new InvalidOperationException("It's not possible to change amount after payment is started.");
 
                 _value = Math.Round(value, 2, MidpointRounding.AwayFromZero);
                 Debug.WriteLine(
-                    $"[{nameof(Payment)}.{nameof(ValueFiat)}.Set] Valor arredondado de {value} => {_value}"
+                    $"[{nameof(Payment)}.{nameof(ValueFiat)}.Set] Rounded value from {value} => {_value}"
                 );
             }
         }

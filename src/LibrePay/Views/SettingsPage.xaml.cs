@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using LibrePay.Interfaces.Devices;
 using LibrePay.Interfaces.Services.Navigation;
@@ -32,7 +32,7 @@ namespace LibrePay.Views
                 , MessengerKeys.SettingsFailedLoadSettings
                 , (_, ex) =>
                 {
-                    Debug.WriteLine($"Erro ao buscar xpub: {Environment.NewLine}{ex}");
+                    Debug.WriteLine($"Error while searching for xpub: {Environment.NewLine}{ex}");
 
                     Device.BeginInvokeOnMainThread(async () =>
                     {

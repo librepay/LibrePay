@@ -137,7 +137,7 @@ namespace LibrePay.Providers
             {
                 var response = SoChainPolicy.ExecuteAsync(() =>
                 {
-                    Debug.WriteLine($"[API/SoChain]: Realizando chamada. Address: {info.Address}");
+                    Debug.WriteLine($"[API/SoChain]: Making call. Address: {info.Address}");
                     return HttpClient.GetAsync($"/api/v2/get_tx_received/{network}/{info.Address}");
                 }).Result;
 
@@ -157,7 +157,7 @@ namespace LibrePay.Providers
                 }
                 catch (Exception e)
                 {
-                    Debug.WriteLine($"ERRO: Falha no callback ({nameof(NotifyTransactionsOfAAddress)}):" + e);
+                    Debug.WriteLine($"ERRO: Callback failure ({nameof(NotifyTransactionsOfAAddress)}):" + e);
                 }
 
                 if (shouldBreak)
