@@ -66,9 +66,9 @@ namespace LibrePay.Providers
                 , policyBuilder.WaitAndRetryForeverAsync(
                     sleepDurationProvider: i => TimeSpan.FromSeconds(3)
                     , onRetry: (r, _, i) => Debug.WriteLine(
-                        "[INFO] Tentando novamente chamada em BitcoinAverage." +
-                        $"\nErro anterior: {r.Exception}" +
-                        $"\nResultado anterior: {r.Result?.StatusCode}"
+                        "[INFO] Trying new call to BitcoinAverage." +
+                        $"\nPrevious error: {r.Exception}" +
+                        $"\nPrevious result: {r.Result?.StatusCode}"
                     )
                 )
                 , policyBuilder
@@ -89,14 +89,14 @@ namespace LibrePay.Providers
             var price = json["averages"].Value<decimal>("day");
             var date = json.Value<DateTime>("display_timestamp");
 
-            Debug.WriteLine($"[INFO] Obteu valor de troca: {price}");
+            Debug.WriteLine($"[INFO] Got exchange rate: {price}");
 
             return new ExchangeRate(price, $"{_regionInfo.CurrencySymbol}/BTC", date, _cultureInfo);
         }
 
         private Task<HttpResponseMessage> ExecuteRequest(Context _)
         {
-            Debug.WriteLine($"Buscando preço médio do dia no BitcoinAverage BTC <=> {_regionInfo.ISOCurrencySymbol}", "INFO");
+            Debug.WriteLine($"Getting daily average rate from BitcoinAverage BTC <=> {_regionInfo.ISOCurrencySymbol}", "INFO");
 
             // !!! Currency symbol must be set on the Settings page
             // !!! Just getting the symbol automaticaly is not acceptable

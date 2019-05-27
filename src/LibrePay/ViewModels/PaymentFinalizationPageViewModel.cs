@@ -60,7 +60,7 @@ namespace LibrePay.ViewModels
 
         public virtual async Task CopyToClipboardAsync(string value)
         {
-            Debug.WriteLine("Copiando valor: {0}", (object)value);
+            Debug.WriteLine("Copying value: {0}", (object)value);
             await Clipboard.SetTextAsync(value);
         }
 

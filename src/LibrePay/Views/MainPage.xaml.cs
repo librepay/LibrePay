@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -39,7 +39,7 @@ namespace LibrePay.Views
                     if (xpubExists)
                         return;
 
-                    Debug.WriteLine("Pedindo para o usuário configurar a xpub key", "UI");
+                    Debug.WriteLine("Asking user to set xpub key", "UI");
 
                     Device.BeginInvokeOnMainThread(async () =>
                     {
@@ -78,7 +78,7 @@ namespace LibrePay.Views
 
         private async void Receive_Clicked(object sender, EventArgs e)
         {
-            Debug.WriteLine($"Pagar pressionado: {_viewModel.TransactionValue}", "UI");
+            Debug.WriteLine($"Receive Clicked: {_viewModel.TransactionValue}", "UI");
 
             Payment payment = null;
             try
@@ -99,13 +99,13 @@ namespace LibrePay.Views
 
         private void Clean_Clicked(object sender, EventArgs e)
         {
-            Debug.WriteLine("Limpar pressionado", "UI");
+            Debug.WriteLine("Clean Clicked", "UI");
             _viewModel.BackspacePress();
         }
 
         private void Clean_OnLongPressed(object sender, EventArgs e)
         {
-            Debug.WriteLine("Limpar segurado", "UI");
+            Debug.WriteLine("Clean LongPressed", "UI");
             _viewModel.ResetPinpad();
         }
 

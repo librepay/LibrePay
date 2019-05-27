@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.Threading.Tasks;
@@ -105,7 +105,7 @@ namespace LibrePay.ViewModels
 
         public async Task<bool> CheckXPubExists()
         {
-            Debug.WriteLine("Checkando se tem xpub key configurada...");
+            Debug.WriteLine("Checking if xpub key is set...");
             var xpub = await _settingsProvider.GetSecureValueAsync<string>(SettingsKeys.XPubKey)
                 .ConfigureAwait(false);
             return !string.IsNullOrWhiteSpace(xpub);
@@ -113,7 +113,7 @@ namespace LibrePay.ViewModels
 
         public void ResetPinpad()
         {
-            Debug.WriteLine("Reiniciando o pinpad...", "INFO");
+            Debug.WriteLine("Reloading pinpad...", "INFO");
 
             TransactionValue = new Pinpad(2, 10, _cultureInfo);
             TransactionValueCrypto = new Pinpad(8, 11, _cultureInfo);
@@ -136,8 +136,8 @@ namespace LibrePay.ViewModels
                 UpdateExchangedValueCrypto();
             }
 
-            Debug.WriteLine($"Novo valor: {TransactionValueCrypto.Value}", "INFO - CRYPTO");
-            Debug.WriteLine($"Novo valor: {TransactionValue.Value}", "INFO - FIAT");
+            Debug.WriteLine($"New value: {TransactionValueCrypto.Value}", "INFO - CRYPTO");
+            Debug.WriteLine($"New falue: {TransactionValue.Value}", "INFO - FIAT");
         }
 
         public async Task<Payment> GenerateNewPayment()
@@ -146,11 +146,11 @@ namespace LibrePay.ViewModels
                 return null;
 
             IsBusy = true;
-            Debug.WriteLine("Seguindo com o pagamento");
+            Debug.WriteLine("Going ahead with the payment");
 
             var payment = await _paymentService.GenerateNewPayment(TransactionValue.ValueDecimal)
                 .ConfigureAwait(false);
-            Debug.WriteLine("Pagamento gerado: {0}", payment);
+            Debug.WriteLine("Payment generated: {0}", payment);
 
             return payment;
         }
@@ -175,8 +175,8 @@ namespace LibrePay.ViewModels
                 UpdateExchangedValueCrypto();
             }
 
-            Debug.WriteLine($"Novo valor: {TransactionValueCrypto.Value}", "INFO - CRYPTO");
-            Debug.WriteLine($"Novo valor: {TransactionValue.Value}", "INFO - FIAT");
+            Debug.WriteLine($"New value: {TransactionValueCrypto.Value}", "INFO - CRYPTO");
+            Debug.WriteLine($"New value: {TransactionValue.Value}", "INFO - FIAT");
         }
 
         private void AppendKeyToFiatValue(char key)

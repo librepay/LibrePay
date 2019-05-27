@@ -111,17 +111,17 @@ namespace LibrePay
 
         protected override void OnStart()
         {
-            Debug.WriteLine("Iniciando...", "APP");
+            Debug.WriteLine("Starting...", "APP");
         }
 
         protected override void OnSleep()
         {
-            Debug.WriteLine("Dormindo...", "APP");
+            Debug.WriteLine("Sleeping...", "APP");
         }
 
         protected override void OnResume()
         {
-            Debug.WriteLine("Resumindo...", "APP");
+            Debug.WriteLine("Resuming...", "APP");
         }
     }
 }
