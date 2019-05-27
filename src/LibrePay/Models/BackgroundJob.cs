@@ -10,13 +10,13 @@ namespace LibrePay.Models
 
         public BackgroundJob(Thread thread)
         {
-            Debug.WriteLine("[INFO] Criando novo background job.");
+            Debug.WriteLine("[INFO] Creating new background job.");
             _thread = thread;
         }
 
         public void Cancel()
         {
-            Debug.WriteLine("[INFO] Finalizando background job.");
+            Debug.WriteLine("[INFO] Ending background job.");
 
             if (_thread != null)
             {
@@ -27,7 +27,7 @@ namespace LibrePay.Models
                 }
                 catch (Exception e)
                 {
-                    Debug.WriteLine("ERRO: Falha ao cancelar thread: " + e);
+                    Debug.WriteLine("ERROR: Failure to cancel thread: " + e);
                 }
             }
         }
