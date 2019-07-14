@@ -8,7 +8,7 @@
              xmlns:iconize="clr-namespace:Plugin.Iconize;assembly=Plugin.Iconize"
              Title="{x:Static app:App.Name}" Padding="10, 25">
     <ContentPage.ToolbarItems>
-        <iconize:IconToolbarItem AutomationId="settings" Icon="md-settings" Clicked="Settings_Clicked" IconColor="White" />
+        <iconize:IconToolbarItem AutomationId="settings" IconImageSource="md-settings" Clicked="Settings_Clicked" IconColor="White" />
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
