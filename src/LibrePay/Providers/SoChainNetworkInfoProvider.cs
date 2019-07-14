@@ -169,11 +169,10 @@ namespace LibrePay.Providers
         {
             foreach (var tx in txArr)
             {
-                yield return new Transaction
+                yield return new Transaction(tx.Value<string>("txid"))
                 {
                     Confirmations = tx.Value<uint>("confirmations"),
-                    Value = tx.Value<decimal>("value"),
-                    Id = tx.Value<string>("txid")
+                    Value = tx.Value<decimal>("value")
                 };
             }
         }

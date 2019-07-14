@@ -2,15 +2,11 @@ namespace LibrePay.Models
 {
     public class Transaction
     {
-        public string Id { get; set; }
+        public string Id { get; }
 
         public decimal Value { get; set; }
 
         public ulong Confirmations { get; set; }
-
-        public Transaction()
-        {
-        }
 
         public Transaction(string id)
         {
