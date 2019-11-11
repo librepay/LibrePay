@@ -9,7 +9,7 @@
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Autofac" Version="4.9.4" />
-        <PackageReference Include="NBitcoin" Version="4.2.16" />
+        <PackageReference Include="NBitcoin" Version="5.0.0" />
         <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
         <PackageReference Include="Polly" Version="7.1.1" />
         <PackageReference Include="Polly.Caching.Memory" Version="3.0.2" />
