@@ -1,5 +1,7 @@
 # LibrePay
 
+[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=librepay/LibrePay)](https://dependabot.com)
+
 An app to make the life of small merchants easier and to spread the \(financial\) freedom to people. 
 
 ## Dependencies
