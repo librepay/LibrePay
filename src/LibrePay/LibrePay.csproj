@@ -8,7 +8,7 @@
         <ProjectGuid>{18852b06-4465-4ec4-918f-3669afb9fa3d}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Autofac" Version="4.9.4" />
+        <PackageReference Include="Autofac" Version="5.1.3" />
         <PackageReference Include="NBitcoin" Version="5.0.7" />
         <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
         <PackageReference Include="Polly" Version="7.2.0" />
